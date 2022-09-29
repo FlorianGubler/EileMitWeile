@@ -82,3 +82,5 @@ fabric.properties
 # DB Files
 database.h2.mv.db
 database.h2.trace.db
+
+coworkspacemgr.iml
