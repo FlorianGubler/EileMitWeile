@@ -84,3 +84,5 @@ database.h2.mv.db
 database.h2.trace.db
 
 coworkspacemgr.iml
+
+angularclient/node_modules
