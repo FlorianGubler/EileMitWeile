@@ -56,7 +56,7 @@ public class MemberController {
             UUID memberid) {
         try{
             String passwordHash = BCrypt.hashpw(memberDTO.getPassword(), BCrypt.gensalt());
-            memberService.update(new MemberEntity(UUID.randomUUID(), memberDTO.getEmail(), memberDTO.getFirstname(), memberDTO.getLastname(), passwordHash, false), memberid);
+            memberService.update(new MemberEntity(UUID.randomUUID(), memberDTO.getEmail(), memberDTO.getFirstname(), memberDTO.getLastname(), passwordHash), memberid);
         } catch(UserNotFoundException e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (UserAlreadyExistsException e){

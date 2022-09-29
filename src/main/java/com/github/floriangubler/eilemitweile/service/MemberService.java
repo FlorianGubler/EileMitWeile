@@ -3,7 +3,6 @@ package com.github.floriangubler.eilemitweile.service;
 import com.github.floriangubler.eilemitweile.exception.UserAlreadyExistsException;
 import com.github.floriangubler.eilemitweile.exception.UserNotFoundException;
 import com.github.floriangubler.eilemitweile.entity.MemberEntity;
-import com.github.floriangubler.eilemitweile.repository.BookingRepository;
 import com.github.floriangubler.eilemitweile.repository.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,11 +18,8 @@ public class MemberService {
 
     private final MemberRepository repository;
 
-    private final BookingRepository bookingRepository;
-
-    MemberService(MemberRepository repository, BookingRepository bookingRepository) {
+    MemberService(MemberRepository repository) {
         this.repository = repository;
-        this.bookingRepository = bookingRepository;
     }
 
     public List<MemberEntity> getMembers(){
@@ -67,7 +63,6 @@ public class MemberService {
     @Transactional
     public void delete(UUID memberid){
         if(repository.findById(memberid).isPresent()){
-            bookingRepository.deleteAllByMemberId(memberid);
             log.info("Executing delete user with id " + memberid + " ...");
             repository.deleteById(memberid);
         } else{

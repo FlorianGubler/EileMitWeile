@@ -43,9 +43,6 @@ public class MemberEntity implements Serializable {
     @Column(name = "password", nullable = false)
     String passwordHash;
 
-    @Column(name = "is_admin", nullable = false)
-    Boolean isAdmin = false;
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

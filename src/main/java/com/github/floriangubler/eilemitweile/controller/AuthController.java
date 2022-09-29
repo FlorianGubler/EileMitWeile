@@ -77,10 +77,6 @@ public class AuthController {
                 val id = UUID.randomUUID().toString();
                 val scopes = new ArrayList<String>();
 
-                if (member.getIsAdmin()) {
-                    scopes.add("ADMIN");
-                }
-
                 val newAccessToken = jwtService.createNewJWT(id, member.getId().toString(), member.getEmail(), scopes);
                 val newRefreshToken = jwtService.createNewJWTRefresh(id, member.getId().toString());
 
@@ -98,10 +94,6 @@ public class AuthController {
 
                 val id = UUID.randomUUID().toString();
                 val scopes = new ArrayList<String>();
-
-                if (member.getIsAdmin()) {
-                    scopes.add("ADMIN");
-                }
 
                 val newAccessToken = jwtService.createNewJWT(id, member.getId().toString(), member.getEmail(), scopes);
                 val newRefreshToken = jwtService.createNewJWTRefresh(id, member.getId().toString());
@@ -125,7 +117,7 @@ public class AuthController {
     ) throws GeneralSecurityException, IOException {
         String passwordHash = BCrypt.hashpw(registerdto.getPassword(), BCrypt.gensalt());
         try{
-            memberService.create(new MemberEntity(UUID.randomUUID(), registerdto.getEmail(), registerdto.getFirstname(), registerdto.getLastname(), passwordHash, false));
+            memberService.create(new MemberEntity(UUID.randomUUID(), registerdto.getEmail(), registerdto.getFirstname(), registerdto.getLastname(), passwordHash));
         } catch(UserAlreadyExistsException e){
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
