@@ -14,15 +14,15 @@ public class OpenApiConfig {
     @Bean
     public GroupedOpenApi publicApi() {
         return GroupedOpenApi.builder()
-                .packagesToScan("com.github.floriangubler.coworkspacemgr.controller")
-                .group("coworkspace-api")
+                .packagesToScan("com.github.floriangubler.eilemitweile.controller")
+                .group("eilemitweile-api")
                 .build();
     }
 
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()
-                .info(new Info().title("COWORKSPACE API").version("v1.0.0"))
+                .info(new Info().title("EILEMITWEILE API").version("v1.0.0"))
                 .components(new Components()
                         .addSecuritySchemes("JWT Auth", new SecurityScheme()
                                 .name("Authorization")
