@@ -1,0 +1,19 @@
+<div style="text-align:center; margin-top: 20px" >
+  <h1>
+    Welcome to {{ title }}!
+  </h1>
+</div>
+<div style="margin-top: 20px; display: flex; align-items: center; justify-content: center">
+  <ul class="hidden-listpoints" style="text-align: center">
+    <li>
+      <button class="default-button button-big" (click)="onRegister()">
+        Registrieren
+      </button>
+    </li>
+    <li>
+      <button class="default-button button-big" [routerLink]="['/login']">
+        Login
+      </button>
+    </li>
+  </ul>
+</div>

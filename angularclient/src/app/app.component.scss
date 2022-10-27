@@ -1,0 +1,49 @@
+.wrapper {
+    display: flex;
+}
+
+.greenHome {
+    flex: 50%;
+  .dot {
+    height: 50px;
+    width: 50px;
+    background-color: green;
+    border-radius: 50%;
+    display: inline-block;
+  }
+}
+
+.redHome {
+    flex: 50%;
+    text-align: right;
+  .dot {
+    height: 50px;
+    width: 50px;
+    background-color: red;
+    border-radius: 50%;
+    display: inline-block;
+  }
+}
+
+.blueHome {
+    flex: 50%;
+  .dot {
+    height: 50px;
+    width: 50px;
+    background-color: blue;
+    border-radius: 50%;
+    display: inline-block;
+  }
+}
+
+.yellowHome {
+    flex: 50%;
+    text-align: right;
+  .dot {
+    height: 50px;
+    width: 50px;
+    background-color: yellow;
+    border-radius: 50%;
+    display: inline-block;
+  }
+}
