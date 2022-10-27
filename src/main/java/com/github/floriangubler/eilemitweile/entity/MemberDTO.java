@@ -22,6 +22,4 @@ public class MemberDTO {
 
     @NotNull
     String password;
-
-    Boolean isAdmin;
 }

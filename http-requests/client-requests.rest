@@ -13,79 +13,22 @@ Content-Type: application/json
 ###
 
 //Get Token from Member
-POST http://localhost:8080/api/auth/token?grant_type=password&email=admin%40test.ch&password=password1234
-
-###
-
-//Get members
-GET http://localhost:8080/api/members
-Authorization: Bearer {{jwt}}
-
-###
-
-//Update a member
-PUT http://localhost:8080/api/members/9135f11e-1b66-4ee6-bbae-df37303cc154
-Authorization: Bearer {{jwt}}
+POST http://localhost:8080/api/games
 Content-Type: application/json
 
 {
-  "email": "test123@test.ch",
-  "firstname": "Test",
-  "lastname": "Test",
-  "password": "password1234"
+  "memberrank": {
+    "test": "FIRST",
+    "test2": "SECOND",
+    "test3": "THIRD",
+    "test4": "LAST"
+  },
+  "startdate": "test",
+  "enddate": "test123"
 }
-
 ###
 
-//Delete a member
-DELETE http://localhost:8080/api/members/9135f11e-1b66-4ee6-bbae-df37303cc154
-Authorization: Bearer {{jwt}}
+//Add Game
+POST http://localhost:8080/api/games
 
-###
-
-// Bookings
-//Get all bookings
-GET http://localhost:8080/api/bookings
-Authorization: Bearer {{jwt}}
-
-###
-
-//Get user bookings
-GET http://localhost:8080/api/bookings/?onlymy=true
-Authorization: Bearer {{jwt}}
-
-###
-
-//Create new booking
-POST http://localhost:8080/api/bookings/
-Authorization: Bearer {{jwt}}
-Content-Type: application/json
-
-{
-  "memberId": "9135f12e-1b66-4ee6-bbae-df37303cc154",
-  "date": "2022-09-21T06:31:54.404Z",
-  "time": "MORNING",
-  "status": "ORDERED"
-}
-
-###
-
-//Update a booking
-PUT http://localhost:8080/api/bookings/413e2297-b84b-42ef-97ed-16a8a9d1d671
-Authorization: Bearer {{jwt}}
-Content-Type: application/json
-
-{
-  "memberId": "9135f12e-1b66-4ee6-bbae-df37303cc154",
-  "date": "2022-09-21",
-  "time": "MORNING",
-  "status": "ORDERED"
-}
-
-###
-
-//Delete a booking
-DELETE http://localhost:8080/api/bookings/413e2297-b84b-42ef-97ed-16a8a9d1d671
-Authorization: Bearer {{jwt}}
-
-###
+//Get User Games
