@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CoworkspaceManagerApplication {
+public class EileMitWeileAPI {
 
     public static void main(String[] args) {
-        SpringApplication.run(CoworkspaceManagerApplication.class, args);
+        SpringApplication.run(EileMitWeileAPI.class, args);
     }
 
 }
