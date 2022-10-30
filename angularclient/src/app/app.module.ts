@@ -6,17 +6,21 @@ import { AppComponent } from './app.component';
 import { StartpageComponent } from './startpage/startpage.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { GameboardComponent } from './gameboard/gameboard.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
     StartpageComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    GameboardComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
