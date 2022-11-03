@@ -1,8 +1,8 @@
 <div class="userblock">
   <div class="userblock-inner">
     <div *ngIf="apiService.isAuthenticated && user != undefined">
-      <span>{{user.firstname + " " + user.lastname}}</span>
-      <span><i>@{{user.email}}</i></span>
+      <span><b>{{user.firstname + " " + user.lastname}}</b></span><br>
+      <span><i style="font-size: small; color: gray">{{user.email}}</i></span>
     </div>
     <div *ngIf="apiService.isAuthenticated == false"><span><a [routerLink]="['/login']">Login</a> or <a [routerLink]="['/register']">Register new</a></span></div>
   </div>
