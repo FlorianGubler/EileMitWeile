@@ -8,6 +8,11 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { GameboardComponent } from './gameboard/gameboard.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { StartDialogComponent } from './start-dialog/start-dialog.component';
+import {MatDialogModule} from "@angular/material/dialog";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -15,12 +20,18 @@ import { ReactiveFormsModule } from '@angular/forms';
     StartpageComponent,
     LoginComponent,
     RegisterComponent,
-    GameboardComponent
+    GameboardComponent,
+    StartDialogComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    BrowserAnimationsModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   providers: [],
   bootstrap: [AppComponent]

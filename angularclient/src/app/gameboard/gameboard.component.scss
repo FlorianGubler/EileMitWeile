@@ -2,7 +2,19 @@
     display: flex;
     justify-content: center;
     background-color: #904F;
+    background-size: cover;
     flex-grow: 1;
+    height: 100%;
+}
+
+.games{
+    display: flex;
+    height: fit-content;
+    background-color: antiquewhite;
+    padding: 5px;
+    flex-direction: column;
+    border-radius: 5%;
+    border: 3px solid;
 }
 
 .dice-component{
@@ -13,6 +25,7 @@
     flex-direction: column;
     border-radius: 5%;
     border: 3px solid;
+    margin-top: 10px;
 
     .roll-button{
         padding: 8px;
@@ -26,15 +39,14 @@
 
     .dices{
         display: flex;
-        padding: 5px;
 
         .dice{
             margin: 5px;
             border: 3px solid;
-            text-align: center;
             height: 50px;
             width: 50px;
             font-size: 50px;
+            text-align: center;
         }
     }
 }
@@ -48,6 +60,7 @@
      padding: 10px;
      border-radius: 5%;
      border: 3px solid;
+     margin: 10px;
 
     .dot {
         height: 50px;
