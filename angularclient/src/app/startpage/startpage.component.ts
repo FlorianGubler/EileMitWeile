@@ -9,18 +9,10 @@ import { Router } from '@angular/router';
 export class StartpageComponent implements OnInit {
 
   title = 'Eile mit Weile'
-  constructor(private router:Router) 
+  constructor(private router:Router)
   {}
 
   ngOnInit(): void {
-  }
-
-  onLogin(){
-    this.router.navigateByUrl('login');
-  }
-
-  onRegister(){
-    this.router.navigateByUrl('register');
   }
 
 }

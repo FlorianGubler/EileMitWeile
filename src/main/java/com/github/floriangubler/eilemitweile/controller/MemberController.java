@@ -35,6 +35,7 @@ public class MemberController {
             security = {@SecurityRequirement(name = "JWT Auth")}
     )
     @GetMapping
+    @CrossOrigin(origins = "http://localhost:4200")
     @PreAuthorize("hasRole('ADMIN')")
     List<MemberEntity> loadUserBookings() {
         return memberService.getMembers();

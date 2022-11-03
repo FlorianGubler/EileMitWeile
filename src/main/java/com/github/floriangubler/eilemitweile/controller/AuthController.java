@@ -42,66 +42,32 @@ public class AuthController {
             operationId = "getToken",
             tags = {"Authorization"}
     )
-    @PostMapping(value = "/token", produces = "application/json")
+    @CrossOrigin(origins = "*")
+    @PostMapping(value = "/login", produces = "application/json")
     public TokenResponse getToken(
-            @Parameter(
-                    description = "The grant type which will be used to get an new token",
-                    required = true,
-                    schema = @Schema(allowableValues = {"password", "refresh_token"})
-            )
-            @RequestParam(name = "grant_type", required = true)
-            String grantType,
-            @Parameter(description = "If refresh_token is selected as grant type this field is needed")
-            @RequestParam(name = "refresh_token", required = false)
-            String refreshToken,
             @Parameter(description = "If password is selected as grant type this field is needed", required = false)
             @RequestParam(name = "email", required = false)
             String email,
             @Parameter(description = "If password is selected as grant type this field is needed", required = false)
             @RequestParam(name = "password", required = false)
             String password) throws GeneralSecurityException, IOException {
-
-        switch (grantType) {
-            case "password" -> {
-                val optionalMember = memberRepository.findByEmail(email);
-                if (optionalMember.isEmpty()) {
-                    throw new IllegalArgumentException("Username or password wrong");
-                }
-
-                if (!BCrypt.checkpw(password, optionalMember.get().getPasswordHash())) {
-                    throw new IllegalArgumentException("Username or password wrong");
-                }
-
-                val member = optionalMember.get();
-
-                val id = UUID.randomUUID().toString();
-                val scopes = new ArrayList<String>();
-
-                val newAccessToken = jwtService.createNewJWT(id, member.getId().toString(), member.getEmail(), scopes);
-                val newRefreshToken = jwtService.createNewJWTRefresh(id, member.getId().toString());
-
-                return new TokenResponse(newAccessToken, newRefreshToken, "Bearer", LocalDateTime.now().plusDays(14).toEpochSecond(ZoneOffset.UTC), LocalDateTime.now().plusDays(1).toEpochSecond(ZoneOffset.UTC));
-            }
-            case "refresh_token" -> {
-                val jwt = jwtService.verifyJwt(refreshToken, false);
-
-                val optionalMember = memberRepository.findById(UUID.fromString(jwt.getClaim("user_id").asString()));
-                if (optionalMember.isEmpty()) {
-                    throw new IllegalArgumentException("Invalid refresh token");
-                }
-
-                val member = optionalMember.get();
-
-                val id = UUID.randomUUID().toString();
-                val scopes = new ArrayList<String>();
-
-                val newAccessToken = jwtService.createNewJWT(id, member.getId().toString(), member.getEmail(), scopes);
-                val newRefreshToken = jwtService.createNewJWTRefresh(id, member.getId().toString());
-
-                return new TokenResponse(newAccessToken, newRefreshToken, "Bearer", LocalDateTime.now().plusDays(14).toEpochSecond(ZoneOffset.UTC), LocalDateTime.now().plusDays(1).toEpochSecond(ZoneOffset.UTC));
-            }
-            default -> throw new IllegalArgumentException("Not supported grant type: " + grantType);
+        val optionalMember = memberRepository.findByEmail(email);
+        if (optionalMember.isEmpty()) {
+            throw new IllegalArgumentException("Username or password wrong");
         }
+
+        if (!BCrypt.checkpw(password, optionalMember.get().getPasswordHash())) {
+            throw new IllegalArgumentException("Username or password wrong");
+        }
+
+        val member = optionalMember.get();
+
+        val id = UUID.randomUUID().toString();
+        val scopes = new ArrayList<String>();
+
+        val newAccessToken = jwtService.createNewJWT(id, member.getId().toString(), member.getEmail(), scopes);
+
+        return new TokenResponse(newAccessToken, "Bearer");
     }
 
     @Operation(
@@ -109,6 +75,7 @@ public class AuthController {
             operationId = "register",
             tags = {"Authorization"}
     )
+    @CrossOrigin(origins = "*")
     @PostMapping(value = "/register", produces = "application/json")
     public ResponseEntity<TokenResponse> register(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Member", required = true)
@@ -121,6 +88,6 @@ public class AuthController {
         } catch(UserAlreadyExistsException e){
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
-        return new ResponseEntity<>(getToken("password", "", registerdto.getEmail(), registerdto.getPassword()), HttpStatus.OK);
+        return new ResponseEntity<>(getToken(registerdto.getEmail(), registerdto.getPassword()), HttpStatus.OK);
     }
 }
