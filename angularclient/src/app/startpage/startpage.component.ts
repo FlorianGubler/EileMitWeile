@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import {User} from "../user";
+import {ApiService} from "../apiservice.service";
 
 @Component({
   selector: 'app-startpage',
@@ -8,9 +10,10 @@ import { Router } from '@angular/router';
 })
 export class StartpageComponent implements OnInit {
 
-  title = 'Eile mit Weile'
-  constructor(private router:Router)
-  {}
+  title = 'Eile mit Weile';
+  public _isAuthenticated: boolean = this.apiService.isAuthenticated;
+
+  constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
   }

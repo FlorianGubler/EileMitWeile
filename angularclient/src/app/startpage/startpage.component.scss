@@ -1,18 +1,23 @@
 h1{
-    font-family: Arial, serif;
-  }
-  button.default-button, a.default-button{
-    padding: 8px;
-    background-color: #904F;
-    margin: 10px;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    cursor: pointer;
-  }
-  button.button-big, a.button-big{
-    font-size: larger;
-  }
-  ul.hidden-listpoints li{
-    list-style: none;
-  }
+  font-family: Arial, serif;
+}
+button.default-button, a.default-button{
+  padding: 8px;
+  background-color: #904F;
+  margin: 10px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+}
+button.button-big, a.button-big{
+  font-size: larger;
+}
+button:disabled{
+  background-color: #d4d4d4;
+  cursor: default;
+  color: black;
+}
+ul.hidden-listpoints li{
+  list-style: none;
+}

@@ -15,6 +15,8 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatInputModule } from '@angular/material/input';
 import {MatButtonModule} from "@angular/material/button";
+import { NavComponent } from './nav/nav.component';
+import {MatCardModule} from "@angular/material/card";
 
 @NgModule({
   declarations: [
@@ -23,21 +25,23 @@ import {MatButtonModule} from "@angular/material/button";
     LoginComponent,
     RegisterComponent,
     GameboardComponent,
-    StartDialogComponent
+    StartDialogComponent,
+    NavComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    BrowserAnimationsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    HttpClientModule,
-    FormsModule,
-    MatButtonModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        BrowserAnimationsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        HttpClientModule,
+        FormsModule,
+        MatButtonModule,
+        MatCardModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

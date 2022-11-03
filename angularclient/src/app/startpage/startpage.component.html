@@ -1,5 +1,6 @@
-<div style="text-align:center; margin-top: 20px" >
-  <h1>
+<app-nav></app-nav>
+<div style="text-align:center" >
+  <h1 style="padding-top: 20px">
     Welcome to {{ title }}!
   </h1>
 </div>
@@ -12,12 +13,12 @@
     </li>
     <li>
       <button class="default-button button-big" [routerLink]="['/login']">
-        Login 
+        Login
       </button>
     </li>
     <li>
-      <button class="default-button button-big" [routerLink]="['/gameboard']">
-        Start 
+      <button class="default-button button-big" [routerLink]="['/gameboard']" [disabled]="!_isAuthenticated">
+        Start <i *ngIf="!_isAuthenticated" style="color: #646464">(You need to login to play)</i>
       </button>
     </li>
   </ul>

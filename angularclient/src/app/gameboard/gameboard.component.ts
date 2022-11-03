@@ -1,6 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { StartDialogComponent } from '../start-dialog/start-dialog.component';
+import {ApiService} from "../apiservice.service";
+import {User} from "../user";
 
 @Component({
   selector: 'app-gameboard',
@@ -11,7 +13,7 @@ export class GameboardComponent implements OnInit {
   rnd1: number = 1;
   rnd2: number = 1;
 
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: MatDialog, public apiService: ApiService) {}
 
   ngOnInit(): void {
     this.openDialog();

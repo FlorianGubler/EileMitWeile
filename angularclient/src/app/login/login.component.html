@@ -1,18 +1,23 @@
-<form>
-    <fieldset>
-        <legend>Login</legend>
-        <div class="form-field">
-            <label>Email:</label>
-            <input name="email" formControlName="email">
-        </div>
-        <div class="form-field">
-            <label>Password:</label>
-            <input name="password" formControlName="password"
-                   type="password">
-        </div>
-    </fieldset>
-    <div class="form-buttons">
-        <button class="button button-primary"
-                (click)="login()">Login</button>
-    </div>
-</form>
+<mat-card>
+  <mat-card-content>
+    <form #loginForm="ngForm" (ngSubmit)="onSubmit()">
+      <h2>EileMitWeile Login</h2>
+      <mat-error *ngIf="loginSuccess == false">
+        The registration has failed, please try again later.
+      </mat-error>
+      <mat-form-field>
+        <input matInput placeholder="E-Mail" [(ngModel)]="email" name="email" required>
+        <mat-error>
+          Please provide a valid email
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="password" placeholder="Password" [(ngModel)]="password" name="password" required>
+        <mat-error>
+          Please provide a valid password
+        </mat-error>
+      </mat-form-field>
+      <button mat-raised-button color="primary" [disabled]="!loginForm.form.valid">Login</button>
+    </form>
+  </mat-card-content>
+</mat-card>

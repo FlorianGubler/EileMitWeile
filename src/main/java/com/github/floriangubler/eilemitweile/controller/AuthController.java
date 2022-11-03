@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin()
 @RequestMapping("/api/auth")
 public class AuthController {
 
@@ -42,7 +43,6 @@ public class AuthController {
             operationId = "getToken",
             tags = {"Authorization"}
     )
-    @CrossOrigin(origins = "*")
     @PostMapping(value = "/login", produces = "application/json")
     public TokenResponse getToken(
             @Parameter(description = "If password is selected as grant type this field is needed", required = false)
@@ -75,7 +75,6 @@ public class AuthController {
             operationId = "register",
             tags = {"Authorization"}
     )
-    @CrossOrigin(origins = "*")
     @PostMapping(value = "/register", produces = "application/json")
     public ResponseEntity<TokenResponse> register(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Member", required = true)
