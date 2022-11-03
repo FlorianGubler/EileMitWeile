@@ -11,9 +11,8 @@ import {ApiService} from "../apiservice.service";
 export class StartpageComponent implements OnInit {
 
   title = 'Eile mit Weile';
-  public _isAuthenticated: boolean = this.apiService.isAuthenticated;
 
-  constructor(private apiService: ApiService) {}
+  constructor(public apiService: ApiService) {}
 
   ngOnInit(): void {
   }

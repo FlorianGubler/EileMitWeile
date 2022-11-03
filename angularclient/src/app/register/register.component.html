@@ -5,6 +5,9 @@
       <mat-error *ngIf="registerSuccess == false">
         The registration has failed, please try again later.
       </mat-error>
+      <mat-error *ngIf="userAlreadyExistsError">
+        A user with this E-Mail already exists.
+      </mat-error>
       <mat-form-field>
         <input matInput placeholder="E-Mail" [(ngModel)]="email" name="email" required>
         <mat-error>
@@ -29,7 +32,7 @@
           Please provide a valid password
         </mat-error>
       </mat-form-field>
-      <button mat-raised-button color="primary" [disabled]="!registerForm.form.valid">Login</button>
+      <button mat-raised-button color="primary" [disabled]="!registerForm.form.valid">Register</button>
     </form>
   </mat-card-content>
 </mat-card>

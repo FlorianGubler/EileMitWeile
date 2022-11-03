@@ -1,8 +1,18 @@
 <div class="userblock">
-  <div class="userblock-inner">
-    <div *ngIf="apiService.isAuthenticated && user != undefined">
-      <span><b>{{user.firstname + " " + user.lastname}}</b></span><br>
-      <span><i style="font-size: small; color: gray">{{user.email}}</i></span>
+  <div class="userblock-inner" style="text-align: center">
+    <div *ngIf="apiService.isAuthenticated && this.apiService.sessionUser != undefined">
+      <span><b>{{this.apiService.sessionUser.firstname + " " + this.apiService.sessionUser.lastname}}</b></span><br>
+      <span><i style="font-size: small; color: gray">{{this.apiService.sessionUser.email}}</i></span>
+      <div style="padding-top: 10px; margin-top: 5px; border-top: 1px solid #cbcbcb;">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Settings</mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="user-expand">
+            <button class="signout-btn" (click)="signOut()">Sign Out</button>
+          </div>
+        </mat-expansion-panel>
+      </div>
     </div>
     <div *ngIf="apiService.isAuthenticated == false"><span><a [routerLink]="['/login']">Login</a> or <a [routerLink]="['/register']">Register new</a></span></div>
   </div>

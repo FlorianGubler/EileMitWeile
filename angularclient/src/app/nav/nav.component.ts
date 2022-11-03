@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ApiService} from "../apiservice.service";
 import {User} from "../user";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-nav',
@@ -8,11 +9,13 @@ import {User} from "../user";
   styleUrls: ['./nav.component.scss']
 })
 export class NavComponent implements OnInit {
-  public user: User | undefined = this.apiService.sessionUser;
-
-  constructor(public apiService: ApiService) { }
+  constructor(public apiService: ApiService, private router: Router) { }
 
   ngOnInit(): void {
   }
 
+  signOut(): void {
+    this.apiService.logout();
+    this.router.navigateByUrl("/");
+  }
 }

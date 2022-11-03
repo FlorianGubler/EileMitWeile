@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
   public email = '';
   public password = '';
 
-  private readonly returnRoute: string = "/gameboard";
+  private readonly returnRoute: string = "/";
 
   constructor(private _router: Router, private _apiService: ApiService) { }
 
@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
       .subscribe({
           next: _ => {
             this.loginSuccess = true;
-            this._router.navigateByUrl('/gameboard');
+            this._router.navigateByUrl(this.returnRoute);
           },
           error: err => {
             this.loginSuccess = false;

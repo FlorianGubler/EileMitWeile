@@ -1,5 +1,6 @@
 package com.github.floriangubler.eilemitweile.controller;
 
+import com.github.floriangubler.eilemitweile.entity.LoginDTO;
 import com.github.floriangubler.eilemitweile.entity.MemberDTO;
 import com.github.floriangubler.eilemitweile.exception.UserAlreadyExistsException;
 import com.github.floriangubler.eilemitweile.service.MemberService;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 @RestController
-@CrossOrigin()
+@CrossOrigin
 @RequestMapping("/api/auth")
 public class AuthController {
 
@@ -45,18 +46,17 @@ public class AuthController {
     )
     @PostMapping(value = "/login", produces = "application/json")
     public TokenResponse getToken(
-            @Parameter(description = "If password is selected as grant type this field is needed", required = false)
-            @RequestParam(name = "email", required = false)
-            String email,
-            @Parameter(description = "If password is selected as grant type this field is needed", required = false)
-            @RequestParam(name = "password", required = false)
-            String password) throws GeneralSecurityException, IOException {
-        val optionalMember = memberRepository.findByEmail(email);
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Member", required = true)
+            @RequestBody(required = true)
+            LoginDTO logindto) {
+        val optionalMember = memberRepository.findByEmail(logindto.getEmail());
         if (optionalMember.isEmpty()) {
+            System.out.println("usr");
             throw new IllegalArgumentException("Username or password wrong");
         }
 
-        if (!BCrypt.checkpw(password, optionalMember.get().getPasswordHash())) {
+        if (!BCrypt.checkpw(logindto.getPassword(), optionalMember.get().getPasswordHash())) {
+            System.out.println("pw");
             throw new IllegalArgumentException("Username or password wrong");
         }
 
@@ -87,6 +87,13 @@ public class AuthController {
         } catch(UserAlreadyExistsException e){
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
-        return new ResponseEntity<>(getToken(registerdto.getEmail(), registerdto.getPassword()), HttpStatus.OK);
+        TokenResponse res;
+        try{
+            res = getToken(new LoginDTO(registerdto.getEmail(), registerdto.getPassword()));
+        } catch (IllegalArgumentException e){
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }

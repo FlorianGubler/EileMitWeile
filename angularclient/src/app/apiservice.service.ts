@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable, Subject} from "rxjs";
 import {JWTTokenResponse} from "./jwttoken-response";
 import {User} from "./user";
@@ -17,14 +17,10 @@ export class ApiService {
     this._isAuthenticated = false;
     //Load JwtToken from localStorage
     var jwttoken = localStorage.getItem("jwt");
-    if(jwttoken != null){
+    if(jwttoken != null && jwttoken != "" && jwttoken != "undefined"){
       this._jwtToken = JSON.parse(jwttoken);
       this._isAuthenticated = true;
-    }
-    //Load User from localStorage
-    var user = localStorage.getItem("user");
-    if(user != null){
-      this._sessionUser = JSON.parse(user);
+      this.getUserData()
     }
   }
 
@@ -34,7 +30,6 @@ export class ApiService {
   }
 
   set sessionUser(user: User | undefined) {
-    localStorage.setItem("user", JSON.stringify(user));
     this._sessionUser = user;
   }
 
@@ -46,17 +41,33 @@ export class ApiService {
     return this._sessionUser;
   }
 
+  getUserData(): Observable<User> {
+    if(this._jwtToken != undefined){
+      var headers = new HttpHeaders({"Authorization": this._jwtToken.token_type + " " + this._jwtToken.access_token});
+      var req = this.http.get<User>(this.baseURL + "/members/", {headers});
+      req.subscribe({
+        next: res_usr => {
+          this.sessionUser = res_usr;
+        }
+      });
+      return req;
+    } else{
+      throw new Error("Cannot get Member when not logged in");
+    }
+  }
+
   login(email: String, password: String): Observable<void>{
     let subject = new Subject<void>();
     this.http.post<JWTTokenResponse>(this.baseURL + "/auth/login/", {"email": email, "password": password}).subscribe({
-      next: res => {
-        this.jwtToken = res;
-        //TODO Get User
+      next: res_login => {
+        this.jwtToken = res_login;
         this._isAuthenticated = true;
+        this.getUserData();
+        subject.next();
         subject.complete();
       },
-      error: err => {
-        subject.error(err);
+      error: err_login => {
+        subject.error(err_login);
         subject.complete();
       }
     });

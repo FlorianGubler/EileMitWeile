@@ -6,19 +6,19 @@
 </div>
 <div style="margin-top: 20px; display: flex; align-items: center; justify-content: center">
   <ul class="hidden-listpoints" style="text-align: center">
-    <li>
+    <li *ngIf="!apiService.isAuthenticated">
       <button class="default-button button-big" [routerLink]="['/register']">
         Registrieren
       </button>
     </li>
-    <li>
+    <li *ngIf="!apiService.isAuthenticated">
       <button class="default-button button-big" [routerLink]="['/login']">
         Login
       </button>
     </li>
     <li>
-      <button class="default-button button-big" [routerLink]="['/gameboard']" [disabled]="!_isAuthenticated">
-        Start <i *ngIf="!_isAuthenticated" style="color: #646464">(You need to login to play)</i>
+      <button class="default-button button-big" [routerLink]="['/gameboard']" [disabled]="!apiService.isAuthenticated">
+        Start new Game <i *ngIf="!apiService.isAuthenticated" style="color: #646464">(You need to login to play)</i>
       </button>
     </li>
   </ul>

@@ -10,7 +10,7 @@ import { MatFormFieldModule } from "@angular/material/form-field"
 })
 export class StartDialogComponent implements OnInit {
 
-  
+
   player1:string = "";
   player2:string = "";
   player3:string = "";
@@ -20,8 +20,8 @@ export class StartDialogComponent implements OnInit {
     player2: [this.player2, []],
     player3: [this.player3, []],
     player4: [this.player4, []]
-});
-  
+  });
+
   constructor(private fb: FormBuilder, private dialogRef: MatDialogRef<StartDialogComponent>) { }
 
   ngOnInit(): void {

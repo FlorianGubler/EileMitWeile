@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../apiservice.service';
 import { take } from 'rxjs';
 import {User} from "../user";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-login',
@@ -11,12 +12,13 @@ import {User} from "../user";
 })
 export class RegisterComponent implements OnInit {
   public registerSuccess: any = null;
+  public userAlreadyExistsError: any = null;
   public email = '';
   public firstname = '';
   public lastname = '';
   public password = '';
 
-  private readonly returnRoute: string = "/gameboard";
+  private readonly returnRoute: string = "/";
 
   constructor(private _router: Router, private _apiService: ApiService) {}
 
@@ -31,11 +33,16 @@ export class RegisterComponent implements OnInit {
       .subscribe({
         next: _ => {
           this.registerSuccess = true;
+          this.userAlreadyExistsError = false;
           this._router.navigateByUrl(this.returnRoute);
         },
-        error: err => {
-          this.registerSuccess = false;
-          console.error(err);
+        error: (err: HttpErrorResponse) => {
+          if(err.status == 409){ //Conflict: Email already exists
+            this.userAlreadyExistsError = true;
+          } else{
+            this.userAlreadyExistsError = false;
+            this.registerSuccess = false;
+          }
         }
       }
     );

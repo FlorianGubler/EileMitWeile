@@ -39,7 +39,7 @@ public class MemberService {
 
     public MemberEntity create(MemberEntity member){
         if(repository.findByEmail(member.getEmail()).isEmpty()){
-            log.info("Executing update user with id " + member.getId() + " ...");
+            log.info("Executing create user with id " + member.getId() + " ..." + member.getEmail());
             return repository.save(member);
         } else{
             throw new UserAlreadyExistsException("Member with email '" + member.getEmail() + "' already exists");

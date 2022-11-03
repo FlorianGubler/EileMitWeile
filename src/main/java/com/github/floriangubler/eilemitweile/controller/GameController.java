@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/games")
 @Tag(name = "Games", description = "EileMitWeile Games management endpoints")
 public class GameController {

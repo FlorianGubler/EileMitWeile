@@ -1,10 +1,10 @@
 export class JWTTokenResponse {
 
   constructor(accessToken: String, tokenType: String) {
-    this.accessToken = accessToken;
-    this.tokenType = tokenType;
+    this.access_token = accessToken;
+    this.token_type = tokenType;
   }
 
-  private accessToken: String;
-  private tokenType: String;
+  public access_token: String;
+  public token_type: String;
 }

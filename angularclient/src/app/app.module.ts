@@ -17,6 +17,7 @@ import { MatInputModule } from '@angular/material/input';
 import {MatButtonModule} from "@angular/material/button";
 import { NavComponent } from './nav/nav.component';
 import {MatCardModule} from "@angular/material/card";
+import {MatExpansionModule} from "@angular/material/expansion";
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import {MatCardModule} from "@angular/material/card";
         HttpClientModule,
         FormsModule,
         MatButtonModule,
-        MatCardModule
+        MatCardModule,
+        MatExpansionModule
     ],
   providers: [],
   bootstrap: [AppComponent]
