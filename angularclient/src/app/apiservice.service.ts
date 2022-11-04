@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Observable, Subject} from "rxjs";
 import {JWTTokenResponse} from "./jwttoken-response";
 import {User} from "./user";
@@ -52,15 +52,22 @@ export class ApiService {
   }
 
   private handleUsualErrors(req: Observable<any>): Observable<any> {
+    var subject = new Subject();
     req.subscribe({
+      next: res => {
+        subject.next(res);
+        subject.complete();
+      },
       error: (err: HttpErrorResponse) => {
         switch(err.status ){
           case 401: this.logout(); break;
           case 504 || 503: this.logout(); alert("Can't connect to Server (Timout)"); break;
         }
+        subject.error(err);
+        subject.complete();
       }
     });
-    return req;
+    return subject;
   }
 
   getUserData(): Observable<User> {
@@ -116,8 +123,10 @@ export class ApiService {
     return subject;
   }
 
-  deleteUser(){
-
+  deleteUser(memberid: string){
+    const headers = this.getAuthHeader();
+    const params = new HttpParams().set('gameid', memberid);
+    return this.handleUsualErrors(this.http.delete<void>(this.baseURL + "/members/{memberid}", {headers, params}));
   }
 
   gameHistory(): Observable<Game[]>{
@@ -130,8 +139,10 @@ export class ApiService {
     return this.handleUsualErrors(this.http.post<void>(this.baseURL + "/games/", game, {headers}));
   }
 
-  deleteGame(){
-
+  deleteGame(gameid: string){
+    const headers = this.getAuthHeader();
+    const params = new HttpParams().set('gameid', gameid);
+    return this.handleUsualErrors(this.http.delete<void>(this.baseURL + "/games/{gameid}", {headers, params}));
   }
 }
 
