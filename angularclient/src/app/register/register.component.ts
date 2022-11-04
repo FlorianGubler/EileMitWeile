@@ -39,6 +39,7 @@ export class RegisterComponent implements OnInit {
         error: (err: HttpErrorResponse) => {
           if(err.status == 409){ //Conflict: Email already exists
             this.userAlreadyExistsError = true;
+            this.registerSuccess = null;
           } else{
             this.userAlreadyExistsError = false;
             this.registerSuccess = false;

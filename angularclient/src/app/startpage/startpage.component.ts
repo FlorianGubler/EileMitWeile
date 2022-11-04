@@ -16,17 +16,7 @@ export class StartpageComponent implements OnInit {
   constructor(public apiService: ApiService) {}
 
   ngOnInit(): void {
-    if(this.apiService.isAuthenticated){
-      this.apiService.storeGame(new Game(null, new Map<String, GameRank>([["username1", GameRank.FIRST], ["username2", GameRank.SECOND]]), new Date(), new Date)).subscribe({
-        next: _ => {
-          this.apiService.gameHistory().subscribe({
-            next: res => {
-              console.log(res);
-            }
-          });
-        }
-      })
-    }
+
   }
 
 }
