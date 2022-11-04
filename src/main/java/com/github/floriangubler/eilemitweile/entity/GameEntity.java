@@ -38,7 +38,7 @@ public class GameEntity implements Serializable {
     @MapKeyColumn(name = "member")
     @Column(name = "rank")
     @Enumerated(EnumType.STRING)
-    private Map<MemberEntity, GameRank> memberrankmap;
+    private Map<String, GameRank> memberrankmap;
 
     @Column(name = "startdate", nullable = false)
     @CreatedDate

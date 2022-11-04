@@ -16,4 +16,14 @@
     </div>
     <div *ngIf="apiService.isAuthenticated == false"><span><a [routerLink]="['/login']">Login</a> or <a [routerLink]="['/register']">Register new</a></span></div>
   </div>
+  <div *ngIf="apiService.isAuthenticated && this.apiService.sessionUser != undefined" class="userblock-inner">
+    <span><b>Game History</b></span>
+    <div class="game-history-container">
+      <!--<ul>
+        <li *ngFor="let game of apiService.gameHistory"> (1)
+          {{ person.name }}
+        </li>
+      </ul>-->
+    </div>
+  </div>
 </div>

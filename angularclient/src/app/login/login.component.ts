@@ -4,6 +4,7 @@ import {User} from "../user";
 import {take} from "rxjs";
 import {ApiService} from "../apiservice.service";
 import {Router} from "@angular/router";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-login',
@@ -11,7 +12,8 @@ import {Router} from "@angular/router";
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  public loginSuccess: any = null;
+  public loginError: any = null;
+  public loginInvalid: any = null;
   public email = '';
   public password = '';
 
@@ -29,12 +31,16 @@ export class LoginComponent implements OnInit {
     this._apiService.login(this.email, this.password).pipe(take(1))
       .subscribe({
           next: _ => {
-            this.loginSuccess = true;
+            this.loginError = false;
             this._router.navigateByUrl(this.returnRoute);
           },
-          error: err => {
-            this.loginSuccess = false;
-            console.error(err);
+          error: (err: HttpErrorResponse) => {
+            if(err.status == 401){
+              this.loginInvalid = true
+            } else{
+              this.loginError = true;
+              this.loginInvalid = false;
+            }
           }
         }
       );

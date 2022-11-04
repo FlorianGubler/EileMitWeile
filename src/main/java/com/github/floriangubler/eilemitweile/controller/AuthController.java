@@ -3,6 +3,7 @@ package com.github.floriangubler.eilemitweile.controller;
 import com.github.floriangubler.eilemitweile.entity.LoginDTO;
 import com.github.floriangubler.eilemitweile.entity.MemberDTO;
 import com.github.floriangubler.eilemitweile.exception.UserAlreadyExistsException;
+import com.github.floriangubler.eilemitweile.exception.UsernamePasswordException;
 import com.github.floriangubler.eilemitweile.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -45,29 +46,17 @@ public class AuthController {
             tags = {"Authorization"}
     )
     @PostMapping(value = "/login", produces = "application/json")
-    public TokenResponse getToken(
+    public ResponseEntity<TokenResponse> login(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Member", required = true)
             @RequestBody(required = true)
-            LoginDTO logindto) {
-        val optionalMember = memberRepository.findByEmail(logindto.getEmail());
-        if (optionalMember.isEmpty()) {
-            System.out.println("usr");
-            throw new IllegalArgumentException("Username or password wrong");
+            LoginDTO logindto) throws UsernamePasswordException {
+        TokenResponse res;
+        try{
+            res = getToken(logindto.getEmail(), logindto.getPassword());
+        } catch (UsernamePasswordException e){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-
-        if (!BCrypt.checkpw(logindto.getPassword(), optionalMember.get().getPasswordHash())) {
-            System.out.println("pw");
-            throw new IllegalArgumentException("Username or password wrong");
-        }
-
-        val member = optionalMember.get();
-
-        val id = UUID.randomUUID().toString();
-        val scopes = new ArrayList<String>();
-
-        val newAccessToken = jwtService.createNewJWT(id, member.getId().toString(), member.getEmail(), scopes);
-
-        return new TokenResponse(newAccessToken, "Bearer");
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @Operation(
@@ -89,11 +78,30 @@ public class AuthController {
         }
         TokenResponse res;
         try{
-            res = getToken(new LoginDTO(registerdto.getEmail(), registerdto.getPassword()));
-        } catch (IllegalArgumentException e){
-            System.out.println(e.getMessage());
+            res = getToken(registerdto.getEmail(), registerdto.getPassword());
+        } catch (UsernamePasswordException e){
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    public TokenResponse getToken(String email, String password) throws UsernamePasswordException {
+        val optionalMember = memberRepository.findByEmail(email);
+        if (optionalMember.isEmpty()) {
+            throw new UsernamePasswordException();
+        }
+
+        if (!BCrypt.checkpw(password, optionalMember.get().getPasswordHash())) {
+            throw new UsernamePasswordException();
+        }
+
+        val member = optionalMember.get();
+
+        val id = UUID.randomUUID().toString();
+        val scopes = new ArrayList<String>();
+
+        val newAccessToken = jwtService.createNewJWT(id, member.getId().toString(), member.getEmail(), scopes);
+
+        return new TokenResponse(newAccessToken, "Bearer");
     }
 }

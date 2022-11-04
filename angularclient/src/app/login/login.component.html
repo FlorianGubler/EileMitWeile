@@ -2,8 +2,11 @@
   <mat-card-content>
     <form #loginForm="ngForm" (ngSubmit)="onSubmit()">
       <h2>EileMitWeile Login</h2>
-      <mat-error *ngIf="loginSuccess == false">
-        The registration has failed, please try again later.
+      <mat-error *ngIf="loginError">
+        The login has failed, please try again later.
+      </mat-error>
+      <mat-error *ngIf="loginInvalid">
+        Your email or password is wrong, please try again.
       </mat-error>
       <mat-form-field>
         <input matInput placeholder="E-Mail" [(ngModel)]="email" name="email" required>

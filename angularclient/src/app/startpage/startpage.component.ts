@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import {User} from "../user";
+import {Component, OnInit} from '@angular/core';
 import {ApiService} from "../apiservice.service";
+import {Game} from "../game";
+import {GameRank} from "../game-rank";
+import {appendHtmlElementToHead} from "@angular/cdk/schematics";
 
 @Component({
   selector: 'app-startpage',
@@ -15,6 +16,17 @@ export class StartpageComponent implements OnInit {
   constructor(public apiService: ApiService) {}
 
   ngOnInit(): void {
+    if(this.apiService.isAuthenticated){
+      this.apiService.storeGame(new Game(null, new Map<String, GameRank>([["username1", GameRank.FIRST], ["username2", GameRank.SECOND]]), new Date(), new Date)).subscribe({
+        next: _ => {
+          this.apiService.gameHistory().subscribe({
+            next: res => {
+              console.log(res);
+            }
+          });
+        }
+      })
+    }
   }
 
 }

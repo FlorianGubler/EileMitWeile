@@ -44,53 +44,17 @@ public class MemberController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    @Operation(
-            summary = "Update a Member",
-            description = "Member updates data",
-            security = {@SecurityRequirement(name = "JWT Auth")}
-    )
-    @PutMapping("/{memberid}")
-    ResponseEntity<Void> updatemember (
-            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Member Update", required = true)
-            @RequestBody(required = true)
-            MemberDTO memberDTO,
-            @Parameter(description = "MemberID", required = true)
-            @PathVariable(name="memberid", required = true)
-            UUID memberid,
-            Authentication authentication) {
-        try{
-            if(Objects.equals(UUID.fromString(authentication.getName()), memberid)){
-                String passwordHash = BCrypt.hashpw(memberDTO.getPassword(), BCrypt.gensalt());
-                memberService.update(new MemberEntity(UUID.randomUUID(), memberDTO.getEmail(), memberDTO.getFirstname(), memberDTO.getLastname(), passwordHash), memberid);
-                return new ResponseEntity<>(HttpStatus.OK);
-            } else{
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-            }
-        } catch(UserNotFoundException e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (UserAlreadyExistsException e){
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
-    }
 
     @Operation(
-            summary = "Delete a Member",
-            description = "Delete a Member (Only Admin)",
+            summary = "Delete logged-in Member",
+            description = "Delete current Member",
             security = {@SecurityRequirement(name = "JWT Auth")}
     )
-    @DeleteMapping("/{memberid}")
-    ResponseEntity<Void> deletemember(
-            @Parameter(description = "MemberID", required = true)
-            @PathVariable(name = "memberid", required = true)
-            UUID memberid,
-            Authentication authentication) {
+    @DeleteMapping("/")
+    ResponseEntity<Void> deletemember(Authentication authentication) {
             try{
-                if(Objects.equals(UUID.fromString(authentication.getName()), memberid)){
-                    memberService.delete(memberid);
-                    return new ResponseEntity<>(HttpStatus.OK);
-                } else{
-                    return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-                }
+                memberService.delete(UUID.fromString(authentication.getName()));
+                return new ResponseEntity<>(HttpStatus.OK);
             } catch(UserNotFoundException e){
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
