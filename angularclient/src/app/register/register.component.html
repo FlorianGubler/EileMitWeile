@@ -1,0 +1,38 @@
+<mat-card>
+  <mat-card-content>
+    <form #registerForm="ngForm" (ngSubmit)="onSubmit()">
+      <h2>EileMitWeile Register</h2>
+      <mat-error *ngIf="registerSuccess == false">
+        The registration has failed, please try again later.
+      </mat-error>
+      <mat-error *ngIf="userAlreadyExistsError">
+        A user with this E-Mail already exists.
+      </mat-error>
+      <mat-form-field>
+        <input matInput placeholder="E-Mail" [(ngModel)]="email" name="email" required>
+        <mat-error>
+          Please provide a valid email
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Firstname" [(ngModel)]="firstname" name="firstname" required>
+        <mat-error>
+          Please provide a valid input
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Lastname" [(ngModel)]="lastname" name="lastname" required>
+        <mat-error>
+          Please provide a valid input
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="password" placeholder="Password" [(ngModel)]="password" name="password" required>
+        <mat-error>
+          Please provide a valid password
+        </mat-error>
+      </mat-form-field>
+      <button mat-raised-button color="primary" [disabled]="!registerForm.form.valid">Register</button>
+    </form>
+  </mat-card-content>
+</mat-card>

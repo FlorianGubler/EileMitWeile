@@ -1,0 +1,74 @@
+.wrapper {
+    display: flex;
+    justify-content: center;
+    background-color: #904F;
+    background-size: cover;
+    flex-grow: 1;
+    height: 100%;
+}
+
+.games{
+    display: flex;
+    height: fit-content;
+    background-color: antiquewhite;
+    padding: 5px;
+    flex-direction: column;
+    border-radius: 5%;
+    border: 3px solid;
+}
+
+.dice-component{
+    display: flex;
+    height: fit-content;
+    background-color: antiquewhite;
+    padding: 5px;
+    flex-direction: column;
+    border-radius: 5%;
+    border: 3px solid;
+    margin-top: 10px;
+
+    .roll-button{
+        padding: 8px;
+        background-color: #904F;
+        margin: 10px;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+    }
+
+    .dices{
+        display: flex;
+
+        .dice{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 5px;
+            border: 3px solid;
+            height: 50px;
+            width: 50px;
+            font-size: 50px;
+        }
+    }
+}
+
+.grid-container{
+    display: grid;
+    grid-template-columns: auto auto auto
+     auto auto auto auto 
+     auto auto auto auto ;
+     background-color: antiquewhite;
+     padding: 10px;
+     border-radius: 5%;
+     border: 3px solid;
+     margin: 10px;
+
+    .dot {
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+        display: inline-block;
+        border: 3px solid;
+      }
+}

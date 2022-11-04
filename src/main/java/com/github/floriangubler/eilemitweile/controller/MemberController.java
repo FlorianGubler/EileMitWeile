@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +20,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/members")
 @Tag(name = "Members", description = "EileMitWeile Members management endpoints")
 public class MemberController {
@@ -32,52 +32,29 @@ public class MemberController {
     }
 
     @Operation(
-            summary = "Update a Member",
-            description = "Admin updates a Member",
+            summary = "Get current Member",
+            description = "Get logged in User Data",
             security = {@SecurityRequirement(name = "JWT Auth")}
     )
-    @PutMapping("/{memberid}")
-    ResponseEntity<Void> updatemember (
-            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Member Update", required = true)
-            @RequestBody(required = true)
-            MemberDTO memberDTO,
-            @Parameter(description = "MemberID", required = true)
-            @PathVariable(name="memberid", required = true)
-            UUID memberid,
-            Authentication authentication) {
+    @GetMapping("/")
+    ResponseEntity<MemberEntity> getmember (Authentication authentication) {
         try{
-            if(Objects.equals(UUID.fromString(authentication.getName()), memberid)){
-                String passwordHash = BCrypt.hashpw(memberDTO.getPassword(), BCrypt.gensalt());
-                memberService.update(new MemberEntity(UUID.randomUUID(), memberDTO.getEmail(), memberDTO.getFirstname(), memberDTO.getLastname(), passwordHash), memberid);
-                return new ResponseEntity<>(HttpStatus.OK);
-            } else{
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-            }
+            return new ResponseEntity<>(memberService.getMember(UUID.fromString(authentication.getName())), HttpStatus.OK);
         } catch(UserNotFoundException e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (UserAlreadyExistsException e){
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
 
     @Operation(
-            summary = "Delete a Member",
-            description = "Delete a Member (Only Admin)",
+            summary = "Delete logged-in Member",
+            description = "Delete current Member",
             security = {@SecurityRequirement(name = "JWT Auth")}
     )
-    @DeleteMapping("/{memberid}")
-    ResponseEntity<Void> deletemember(
-            @Parameter(description = "MemberID", required = true)
-            @PathVariable(name = "memberid", required = true)
-            UUID memberid,
-            Authentication authentication) {
+    @DeleteMapping("/")
+    ResponseEntity<Void> deletemember(Authentication authentication) {
             try{
-                if(Objects.equals(UUID.fromString(authentication.getName()), memberid)){
-                    memberService.delete(memberid);
-                    return new ResponseEntity<>(HttpStatus.OK);
-                } else{
-                    return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-                }
+                memberService.delete(UUID.fromString(authentication.getName()));
+                return new ResponseEntity<>(HttpStatus.OK);
             } catch(UserNotFoundException e){
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }

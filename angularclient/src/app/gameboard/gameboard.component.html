@@ -1,0 +1,17 @@
+<app-nav></app-nav>
+<div class="wrapper">
+    <div class="dice-component">
+        <button class="roll-button" (click)="roll()">Roll</button>
+        <div class="dices">
+            <div class="dice">{{rnd1}}</div>
+        </div>
+    </div>
+    <div class="grid-container">
+        <div class="grid-item" *ngFor="let dot of dots; index as i">
+            <span class="dot" [ngStyle]="{backgroundColor:dot.color, 'border-color':dot.bordercolor}"></span>
+        </div>
+    </div>
+    <div class="games">
+      <h2>Vergangene Spiele</h2>
+    </div>
+</div>

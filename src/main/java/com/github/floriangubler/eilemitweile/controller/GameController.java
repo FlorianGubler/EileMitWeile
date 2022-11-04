@@ -1,11 +1,6 @@
 package com.github.floriangubler.eilemitweile.controller;
 
-import com.github.floriangubler.eilemitweile.entity.GameDTO;
 import com.github.floriangubler.eilemitweile.entity.GameEntity;
-import com.github.floriangubler.eilemitweile.entity.MemberDTO;
-import com.github.floriangubler.eilemitweile.entity.MemberEntity;
-import com.github.floriangubler.eilemitweile.entity.enumeration.GameRank;
-import com.github.floriangubler.eilemitweile.exception.UserAlreadyExistsException;
 import com.github.floriangubler.eilemitweile.exception.UserNotFoundException;
 import com.github.floriangubler.eilemitweile.service.GameService;
 import com.github.floriangubler.eilemitweile.service.MemberService;
@@ -15,14 +10,13 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/games")
 @Tag(name = "Games", description = "EileMitWeile Games management endpoints")
 public class GameController {
@@ -50,16 +44,13 @@ public class GameController {
             description = "Store a Game",
             security = {@SecurityRequirement(name = "JWT Auth")}
     )
-    @PutMapping("/{memberid}")
+    @PostMapping
     ResponseEntity<Void> creategame (
             @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Create Game", required = true)
             @RequestBody(required = true)
-            GameDTO gameDTO) {
-        Map<MemberEntity, GameRank> memberrankmap = new HashMap<>();
-        for(Map.Entry<UUID, GameRank> entry : gameDTO.getMemberrank().entrySet()){
-            memberrankmap.put(memberService.getMember(entry.getKey()), entry.getValue());
-        }
-        gameService.create(new GameEntity(UUID.randomUUID(), memberrankmap, gameDTO.getStartdate(), gameDTO.getEnddate()));
+            GameEntity game) {
+        game.setId(UUID.randomUUID());
+        gameService.create(game);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
