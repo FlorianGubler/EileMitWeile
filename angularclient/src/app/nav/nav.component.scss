@@ -33,3 +33,42 @@
 .mat-expansion-panel-body {
   padding: 0 0 0 !important;
 }
+.game-history-container{
+  margin-top: 5px;
+  border-top: 1px solid #cbcbcb;
+}
+.game-history-container ul{
+  padding: 0;
+}
+.history-game{
+  list-style: none;
+  padding: 10px;
+  background-color: #eeeeee;
+  border-radius: 5px;
+}
+.user-rankings li{
+  list-style: none;
+}
+.user-rankings .gamerank span{
+  font-size: small;
+}
+.user-rankings .gamerank:before{
+  font-weight: bolder;
+  padding: 10px;
+}
+.user-rankings .gamerank-1:before{
+  content: "1";
+  color: gold;
+}
+.user-rankings .gamerank-2:before{
+  content: "2";
+  color: silver;
+}
+.user-rankings .gamerank-3:before{
+  content: "3";
+  color: saddlebrown;
+}
+.user-rankings .gamerank-4:before{
+  content: "4";
+  color: grey;
+}

@@ -19,7 +19,43 @@
   <div *ngIf="apiService.isAuthenticated && this.apiService.sessionUser != undefined" class="userblock-inner">
     <span><b>Game History</b></span>
     <div class="game-history-container">
-      Games...
+      <ul>
+        <li class="history-game">
+          <span><b>Game #1</b></span><br>
+          <span style="color: #989898; font-size: small"><i>Started: 04.11.2022</i></span>
+          <div style="margin-top: 5px">
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>Rankings</mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="user-rankings">
+                <ul>
+                  <li>
+                    <div class="gamerank gamerank-1">
+                      <span>Playername #1</span>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="gamerank gamerank-2">
+                      <span>Playername #2</span>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="gamerank gamerank-3">
+                      <span>Playername #3</span>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="gamerank gamerank-4">
+                      <span>Playername #4</span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </mat-expansion-panel>
+          </div>
+        </li>
+      </ul>
     </div>
   </div>
 </div>
