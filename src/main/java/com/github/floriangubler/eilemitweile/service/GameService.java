@@ -21,17 +21,21 @@ public class GameService {
 
     private final GameRepository repository;
 
-    GameService(GameRepository repository) {
+    private final MemberRepository memberRepository;
+
+    GameService(GameRepository repository, MemberRepository memberRepository) {
         this.repository = repository;
+        this.memberRepository = memberRepository;
     }
 
-    public List<GameEntity> getUserGames(UUID gameid){
+    public List<GameEntity> getUserGames(UUID userid){
         log.info("Executing find Games of member ...");
-        return repository.findUserGames(gameid);
+        return repository.findGameEntitiesByUserId(userid);
     }
 
     public GameEntity create(GameEntity game){
-        log.info("Executing update user with id " + game.getId() + " ...");
+        log.info("Executing create game with id " + game.getId() + " ..., For User: " + game.getUser().getId());
+        log.info("Map: {}", game.getMemberrankmap());
         return repository.save(game);
     }
 

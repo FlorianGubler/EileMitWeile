@@ -5,16 +5,21 @@
     background-size: cover;
     flex-grow: 1;
     height: 100%;
+    overflow: auto;
+}
+.wrapper > *{
+  margin-top: 10px;
 }
 
 .games{
-    display: flex;
-    height: fit-content;
-    background-color: antiquewhite;
-    padding: 5px;
-    flex-direction: column;
-    border-radius: 5%;
-    border: 3px solid;
+    position: relative;
+  display: flex;
+  height: fit-content;
+  background-color: antiquewhite;
+  padding: 5px;
+  flex-direction: column;
+  border-radius: 5%;
+  border: 3px solid;
 }
 
 .dice-component{
@@ -25,7 +30,6 @@
     flex-direction: column;
     border-radius: 5%;
     border: 3px solid;
-    margin-top: 10px;
 
     .roll-button{
         padding: 8px;
@@ -56,15 +60,15 @@
 .grid-container{
     display: grid;
     grid-template-columns: auto auto auto
-     auto auto auto auto 
+     auto auto auto auto
      auto auto auto auto ;
-     background-color: antiquewhite;
-     padding: 10px;
-     border-radius: 5%;
-     border: 3px solid;
-     margin: 10px;
+   background-color: antiquewhite;
+   padding: 10px;
+   border-radius: 5%;
+   border: 3px solid;
+   margin: 0 10px 10px;
 
-    .dot {
+  .dot {
         height: 50px;
         width: 50px;
         border-radius: 50%;

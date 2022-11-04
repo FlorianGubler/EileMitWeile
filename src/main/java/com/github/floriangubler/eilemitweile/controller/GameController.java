@@ -1,6 +1,9 @@
 package com.github.floriangubler.eilemitweile.controller;
 
+import com.github.floriangubler.eilemitweile.entity.GameDTO;
 import com.github.floriangubler.eilemitweile.entity.GameEntity;
+import com.github.floriangubler.eilemitweile.entity.Rank;
+import com.github.floriangubler.eilemitweile.entity.enumeration.GameRank;
 import com.github.floriangubler.eilemitweile.exception.UserNotFoundException;
 import com.github.floriangubler.eilemitweile.service.GameService;
 import com.github.floriangubler.eilemitweile.service.MemberService;
@@ -48,9 +51,13 @@ public class GameController {
     ResponseEntity<Void> creategame (
             @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Create Game", required = true)
             @RequestBody(required = true)
-            GameEntity game) {
-        game.setId(UUID.randomUUID());
-        gameService.create(game);
+            GameDTO game,
+            Authentication authentication) {
+        Map<String, GameRank> map = new HashMap<>();
+        for(Rank rank : game.getMemberrankmap()) {
+            map.put(rank.getPlayerName(), rank.getGameRank());
+        }
+        gameService.create(new GameEntity(UUID.randomUUID(), map, game.getStartdate(), game.getEnddate(), memberService.getMember(UUID.fromString(authentication.getName()))));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

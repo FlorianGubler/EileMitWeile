@@ -10,6 +10,5 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface GameRepository extends JpaRepository<GameEntity, UUID> {
-    @Query("select s from GAME s join s.memberrankmap m where ?1 in (VALUE(m))")
-    List<GameEntity> findUserGames(UUID memberid);
+    List<GameEntity> findGameEntitiesByUserId(UUID memberid);
 }

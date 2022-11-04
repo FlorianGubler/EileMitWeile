@@ -30,7 +30,7 @@ public class GameEntity implements Serializable {
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id", updatable = false, nullable = false)
     @Type(type = "org.hibernate.type.UUIDCharType")
-    UUID id = UUID.randomUUID();
+    UUID id;
 
     @ElementCollection
     @CollectionTable(name = "userrank_mapping",
@@ -46,4 +46,8 @@ public class GameEntity implements Serializable {
 
     @Column(name = "enddate", nullable = false)
     Date enddate;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    MemberEntity user;
 }

@@ -134,7 +134,7 @@ export class ApiService {
     return this.handleUsualErrors(this.http.get<Game[]>(this.baseURL + "/games/", {headers}));
   }
 
-  storeGame(game: Game){
+  storeGame(game: Game): Observable<void>{
     const headers = this.getAuthHeader();
     return this.handleUsualErrors(this.http.post<void>(this.baseURL + "/games/", game, {headers}));
   }
