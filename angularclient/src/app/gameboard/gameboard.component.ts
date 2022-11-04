@@ -3,6 +3,7 @@ import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dial
 import { StartDialogComponent } from '../start-dialog/start-dialog.component';
 import {ApiService} from "../apiservice.service";
 import {User} from "../user";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-gameboard',
@@ -13,9 +14,13 @@ export class GameboardComponent implements OnInit {
   rnd1: number = 1;
   rnd2: number = 1;
 
-  constructor(private dialog: MatDialog, public apiService: ApiService) {}
+  constructor(private dialog: MatDialog, public apiService: ApiService, private router: Router) {}
 
   ngOnInit(): void {
+    if(!this.apiService.isAuthenticated){
+      this.router.navigateByUrl("/");
+      //TODO Close Dialog
+    }
     this.openDialog();
   }
 

@@ -51,7 +51,7 @@ export class ApiService {
     }
   }
 
-  private handleUsualErrors(req: Observable<any>): Observable<any> {
+  private handleGenericErrors(req: Observable<any>): Observable<any> {
     var subject = new Subject();
     req.subscribe({
       next: res => {
@@ -62,6 +62,7 @@ export class ApiService {
         switch(err.status ){
           case 401: this.logout(); break;
           case 504 || 503: this.logout(); alert("Can't connect to Server (Timout)"); break;
+          default: console.log(err)
         }
         subject.error(err);
         subject.complete();
@@ -72,7 +73,7 @@ export class ApiService {
 
   getUserData(): Observable<User> {
     const headers = this.getAuthHeader();
-    const req = this.handleUsualErrors(this.http.get<User>(this.baseURL + "/members/", {headers}));
+    const req = this.handleGenericErrors(this.http.get<User>(this.baseURL + "/members/", {headers}));
     req.subscribe({
       next: res_usr => {
         this.sessionUser = res_usr;
@@ -83,7 +84,7 @@ export class ApiService {
 
   login(email: String, password: String): Observable<void>{
     let subject = new Subject<void>();
-    this.handleUsualErrors(this.http.post<JWTTokenResponse>(this.baseURL + "/auth/login/", {"email": email, "password": password})).subscribe({
+    this.handleGenericErrors(this.http.post<JWTTokenResponse>(this.baseURL + "/auth/login/", {"email": email, "password": password})).subscribe({
       next: res_login => {
         this.jwtToken = res_login;
         this._isAuthenticated = true;
@@ -107,7 +108,7 @@ export class ApiService {
 
   register(user: User): Observable<User>{
     let subject = new Subject<User>();
-    this.handleUsualErrors(this.http.post<JWTTokenResponse>(this.baseURL + "/auth/register/", user)).subscribe({
+    this.handleGenericErrors(this.http.post<JWTTokenResponse>(this.baseURL + "/auth/register/", user)).subscribe({
       next: res => {
         this.jwtToken = res;
         this.sessionUser = user;
@@ -126,23 +127,23 @@ export class ApiService {
   deleteUser(memberid: string){
     const headers = this.getAuthHeader();
     const params = new HttpParams().set('gameid', memberid);
-    return this.handleUsualErrors(this.http.delete<void>(this.baseURL + "/members/{memberid}", {headers, params}));
+    return this.handleGenericErrors(this.http.delete<void>(this.baseURL + "/members/{memberid}", {headers, params}));
   }
 
   gameHistory(): Observable<Game[]>{
     const headers = this.getAuthHeader();
-    return this.handleUsualErrors(this.http.get<Game[]>(this.baseURL + "/games/", {headers}));
+    return this.handleGenericErrors(this.http.get<Game[]>(this.baseURL + "/games/", {headers}));
   }
 
   storeGame(game: Game): Observable<void>{
     const headers = this.getAuthHeader();
-    return this.handleUsualErrors(this.http.post<void>(this.baseURL + "/games/", game, {headers}));
+    return this.handleGenericErrors(this.http.post<void>(this.baseURL + "/games/", game, {headers}));
   }
 
   deleteGame(gameid: string){
     const headers = this.getAuthHeader();
     const params = new HttpParams().set('gameid', gameid);
-    return this.handleUsualErrors(this.http.delete<void>(this.baseURL + "/games/{gameid}", {headers, params}));
+    return this.handleGenericErrors(this.http.delete<void>(this.baseURL + "/games/{gameid}", {headers, params}));
   }
 }
 
