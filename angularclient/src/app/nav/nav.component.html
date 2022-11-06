@@ -16,13 +16,15 @@
     </div>
     <div *ngIf="apiService.isAuthenticated == false"><span><a [routerLink]="['/login']">Login</a> or <a [routerLink]="['/register']">Register new</a></span></div>
   </div>
-  <div *ngIf="apiService.isAuthenticated && this.apiService.sessionUser != undefined" class="userblock-inner">
+  <div *ngIf="apiService.isAuthenticated && this.apiService.sessionUser != undefined" class="userblock-inner" style="max-height: 50vh; overflow-y: auto;">
     <span><b>Game History</b></span>
-    <div class="game-history-container">
+    <div class="game-history-container" style="text-align: center; padding-top: 10px">
+      <span *ngIf="failedToLoadGameHistory" style="font-style: italic; color: #989898">Failed to load Game History, please try again later.</span>
+      <span *ngIf="gameHistory.length == 0" style="font-style: italic; color: #989898">No Games found.</span>
       <ul>
-        <li class="history-game">
-          <span><b>Game #1</b></span><br>
-          <span style="color: #989898; font-size: small"><i>Started: 04.11.2022</i></span>
+        <li class="history-game" *ngFor="let game of gameHistory; index as i">
+          <span><b>Game #{{i}}</b></span><br>
+          <span style="color: #989898; font-size: small"><i>{{datePipe.transform(game.startdate, 'dd.MM.yyy HH:mm')}}</i></span>
           <div style="margin-top: 5px">
             <mat-expansion-panel>
               <mat-expansion-panel-header>
@@ -30,24 +32,9 @@
               </mat-expansion-panel-header>
               <div class="user-rankings">
                 <ul>
-                  <li>
-                    <div class="gamerank gamerank-1">
-                      <span>Playername #1</span>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="gamerank gamerank-2">
-                      <span>Playername #2</span>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="gamerank gamerank-3">
-                      <span>Playername #3</span>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="gamerank gamerank-4">
-                      <span>Playername #4</span>
+                  <li *ngFor="let rank of gameHistory[i].memberrankmap | keyvalue">
+                    <div class="gamerank gamerank-{{rank.value}}">
+                      <span>{{rank.key}}</span>
                     </div>
                   </li>
                 </ul>

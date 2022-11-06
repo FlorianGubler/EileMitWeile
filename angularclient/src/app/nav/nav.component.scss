@@ -45,6 +45,7 @@
   padding: 10px;
   background-color: #eeeeee;
   border-radius: 5px;
+  margin-bottom: 10px;
 }
 .user-rankings li{
   list-style: none;
@@ -56,19 +57,19 @@
   font-weight: bolder;
   padding: 10px;
 }
-.user-rankings .gamerank-1:before{
+.user-rankings .gamerank-FIRST:before{
   content: "1";
   color: gold;
 }
-.user-rankings .gamerank-2:before{
+.user-rankings .gamerank-SECOND:before{
   content: "2";
   color: silver;
 }
-.user-rankings .gamerank-3:before{
+.user-rankings .gamerank-THIRD:before{
   content: "3";
   color: saddlebrown;
 }
-.user-rankings .gamerank-4:before{
+.user-rankings .gamerank-LAST:before{
   content: "4";
   color: grey;
 }
