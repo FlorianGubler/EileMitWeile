@@ -8,7 +8,9 @@
     </div>
     <div class="grid-container">
         <div class="grid-item" *ngFor="let dot of dots; index as i">
-            <span class="dot" [ngStyle]="{backgroundColor:dot.color, 'border-color':dot.bordercolor}"></span>
+            <span class="dot" [ngStyle]="{backgroundColor:dot.color, 'border-color':dot.bordercolor}">
+             <p class="figure" [ngStyle]="{color:dot.figureColor}" (click)="move(i)">♟</p>
+            </span>
         </div>
     </div>
     <div class="games">
