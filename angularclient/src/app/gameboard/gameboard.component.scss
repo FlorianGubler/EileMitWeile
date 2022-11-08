@@ -1,84 +1,17 @@
 .wrapper {
-    display: flex;
-    justify-content: center;
-    background-color: #904F;
-    background-size: cover;
-    flex-grow: 1;
-    height: 100%;
-}
-.wrapper > *{
-    margin-top: 10px;
-}
-
-.games{
-    position: relative;
-    display: flex;
-    height: fit-content;
-    background-color: antiquewhite;
-    padding: 5px;
-    flex-direction: column;
-    border-radius: 5%;
-    border: 3px solid;
-}
-
-.dice-component{
-    display: flex;
-    height: fit-content;
-    background-color: antiquewhite;
-    padding: 5px;
-    flex-direction: column;
-    border-radius: 5%;
-    border: 3px solid;
-.left-components {
   display: flex;
-  flex-direction: column;
-  .dice-component {
-    display: flex;
-    height: fit-content;
-    background-color: antiquewhite;
-    padding: 5px;
-    flex-direction: column;
-    border-radius: 5%;
-    border: 3px solid;
-    margin-top: 10px;
-    justify-content: center;
-    align-items: center;
-
-    .roll-button {
-      padding: 8px;
-      background-color: #904f;
-      margin: 10px;
-      border: none;
-      border-radius: 5px;
-      color: white;
-      cursor: pointer;
-    }
-
-    .dice {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin: 5px;
-      border: 3px solid;
-      height: 50px;
-      width: 50px;
-      font-size: 50px;
-    }
-  }
-
-  .nextPlayer-component {
-    display: flex;
-    height: fit-content;
-    background-color: antiquewhite;
-    padding: 5px;
-    flex-direction: column;
-    border-radius: 5%;
-    border: 3px solid;
-    margin-top: 10px;
-  }
+  justify-content: center;
+  background-color: #904f;
+  background-size: cover;
+  flex-grow: 1;
+  height: 100%;
+}
+.wrapper > * {
+  margin-top: 10px;
 }
 
 .games {
+  position: relative;
   display: flex;
   height: fit-content;
   background-color: antiquewhite;
@@ -88,33 +21,96 @@
   border: 3px solid;
 }
 
-.grid-container{
-    display: grid;
-    grid-template-columns: auto auto auto
-     auto auto auto auto
-     auto auto auto auto ;
-     background-color: antiquewhite;
-     padding: 10px;
-     border-radius: 5%;
-     border: 3px solid;
-     margin: 10px;
-
-  .dot {
-    height: 50px;
-    width: 50px;
-    border-radius: 50%;
-    display: inline-block;
-    border: 3px solid;
-    font-size: 50px;
-    align-items: center;
+  .left-components {
     display: flex;
-    justify-content: center;
-
-    .figure {
+    flex-direction: column;
+    .dice-component {
       display: flex;
-      align-items: center;
+      height: fit-content;
+      background-color: antiquewhite;
+      padding: 5px;
+      flex-direction: column;
+      border-radius: 5%;
+      border: 3px solid;
+      margin-top: 10px;
       justify-content: center;
-      cursor: pointer;
+      align-items: center;
+
+      .roll-button {
+        padding: 8px;
+        background-color: #904f;
+        margin: 10px;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+      }
+
+      .dice {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 5px;
+        border: 3px solid;
+        height: 50px;
+        width: 50px;
+        font-size: 50px;
+      }
+    }
+
+    .nextPlayer-component {
+      display: flex;
+      height: fit-content;
+      background-color: antiquewhite;
+      padding: 5px;
+      flex-direction: column;
+      border-radius: 5%;
+      border: 3px solid;
+      margin-top: 10px;
     }
   }
-}
+
+  .games {
+    display: flex;
+    height: fit-content;
+    background-color: antiquewhite;
+    padding: 5px;
+    flex-direction: column;
+    border-radius: 5%;
+    border: 3px solid;
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns:
+      auto auto auto
+      auto auto auto auto
+      auto auto auto auto;
+    background-color: antiquewhite;
+    padding: 10px;
+    border-radius: 5%;
+    border: 3px solid;
+    margin: 10px;
+
+    .dot {
+      height: 50px;
+      width: 50px;
+      border-radius: 50%;
+      display: inline-block;
+      border: 3px solid;
+      font-size: 50px;
+      align-items: center;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+
+      .figure {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        margin: 0px;
+      }
+    }
+  }
+

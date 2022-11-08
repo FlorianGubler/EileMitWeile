@@ -7,7 +7,7 @@ import {
 import { StartDialogComponent } from '../start-dialog/start-dialog.component';
 import { ApiService } from '../apiservice.service';
 import { User } from '../user';
-import {Router} from "@angular/router";
+import { Router, withRouterConfig } from '@angular/router';
 
 @Component({
   selector: 'app-gameboard',
@@ -16,11 +16,15 @@ import {Router} from "@angular/router";
 })
 export class GameboardComponent implements OnInit {
   rnd1: number = 1;
-  nextPlayer: Player = new Player('', '');
+  nextPlayer: Player = new Player('', '', 0);
   players: Player[] = [];
   fieldId: number | undefined;
 
-  constructor(private dialog: MatDialog, public apiService: ApiService, private router: Router) {}
+  constructor(
+    private dialog: MatDialog,
+    public apiService: ApiService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     if(!this.apiService.isAuthenticated){
@@ -32,7 +36,6 @@ export class GameboardComponent implements OnInit {
 
   roll() {
     this.rnd1 = Math.round(Math.random() * (5 - 1 + 1) + 1);
-    console.log(this.players);
   }
 
   openDialog() {
@@ -53,13 +56,12 @@ export class GameboardComponent implements OnInit {
       .subscribe(
         (data) => (
           (this.players = [
-            new Player(data['player1'], 'red'),
-            new Player(data['player2'], 'blue'),
-            new Player(data['player3'], 'yellow'),
-            new Player(data['player4'], 'green'),
+            new Player(data['player1'], 'red', 0),
+            new Player(data['player2'], 'blue', 1),
+            new Player(data['player3'], '#f6be00', 2),
+            new Player(data['player4'], 'green', 3),
           ]),
-          (this.nextPlayer.name = this.players[0].name),
-          (this.nextPlayer.color = 'red')
+          (this.nextPlayer = this.players[0])
         )
       );
   }
@@ -81,17 +83,59 @@ export class GameboardComponent implements OnInit {
 
     var clickedDot = this.dots.find((d) => d.fieldId == field);
 
-    if (clickedDot != undefined) {
+    if (clickedDot?.figureColor == player.color && clickedDot != undefined) {
       clickedDot.content = '';
     }
 
-    if (diceNmbr == 6 && field.toString().length == 3) {
+    if (this.cantMove(player)) {
+    }
+
+    //leave Home
+    if (
+      diceNmbr == 6 &&
+      field.toString().length == 3 &&
+      clickedDot?.color == player.color
+    ) {
       this.leaveHome(field);
       return;
     }
 
-    if (field > 0 && field <= 40) {
+    //normal move
+    if (field > 0 && field <= 40 && clickedDot?.figureColor == player.color) {
+      var nextFieldId = field + diceNmbr;
+
+      var nextDot = this.dots.find((d) => d.fieldId == nextFieldId);
+      if (nextDot != undefined) {
+        nextDot.content = '♟';
+        nextDot.figureColor = player.color;
+      }
     }
+  }
+
+  finishRound() {
+    if (this.nextPlayer.playerID == 3) {
+      this.nextPlayer = this.players[0];
+    } else {
+      this.nextPlayer = this.players[this.nextPlayer.playerID + 1];
+    }
+  }
+
+  cantMove(player: Player) {
+    switch (player.color) {
+      case 'red':
+        this.checkHome(201, 202, 203, 204)
+      break;
+    }
+    return true;
+  }
+
+  checkHome(id1:number, id2:number, id3:number, id4:number){
+
+    if(this.dots.find((d) => d.fieldId == id1)?.content == ''){
+
+    }
+
+    return true;
   }
 
   private leaveHome(field: number) {
@@ -116,7 +160,7 @@ export class GameboardComponent implements OnInit {
       case '4':
         if (yellowStartDot != undefined) {
           yellowStartDot.content = '♟';
-          yellowStartDot.figureColor = 'yellow';
+          yellowStartDot.figureColor = '#f6be00';
         }
         break;
       case '5':
@@ -635,7 +679,7 @@ export class GameboardComponent implements OnInit {
     },
     {
       color: '',
-      bordercolor: 'yellow',
+      bordercolor: '#f6be00',
       figureColor: 'transparent',
       fieldId: 0,
       content: '',
@@ -713,7 +757,7 @@ export class GameboardComponent implements OnInit {
     },
     {
       color: '',
-      bordercolor: 'yellow',
+      bordercolor: '#f6be00',
       figureColor: 'transparent',
       fieldId: 0,
       content: '',
@@ -791,7 +835,7 @@ export class GameboardComponent implements OnInit {
     },
     {
       color: '',
-      bordercolor: 'yellow',
+      bordercolor: '#f6be00',
       figureColor: 'transparent',
       fieldId: 0,
       content: '',
@@ -833,14 +877,14 @@ export class GameboardComponent implements OnInit {
     },
     //row10
     {
-      color: 'yellow',
+      color: '#f6be00',
       bordercolor: '',
       figureColor: '',
       fieldId: 401,
       content: '♟',
     },
     {
-      color: 'yellow',
+      color: '#f6be00',
       bordercolor: '',
       figureColor: '',
       fieldId: 402,
@@ -869,7 +913,7 @@ export class GameboardComponent implements OnInit {
     },
     {
       color: '',
-      bordercolor: 'yellow',
+      bordercolor: '#f6be00',
       figureColor: 'transparent',
       fieldId: 0,
       content: '',
@@ -911,14 +955,14 @@ export class GameboardComponent implements OnInit {
     },
     //row11
     {
-      color: 'yellow',
+      color: '#f6be00',
       bordercolor: '',
       figureColor: '',
       fieldId: 403,
       content: '♟',
     },
     {
-      color: 'yellow',
+      color: '#f6be00',
       bordercolor: '',
       figureColor: '',
       fieldId: 404,
@@ -940,7 +984,7 @@ export class GameboardComponent implements OnInit {
     },
     {
       color: '',
-      bordercolor: 'yellow',
+      bordercolor: '#f6be00',
       figureColor: 'transparent',
       fieldId: 31,
       content: '',
@@ -999,10 +1043,12 @@ export class Dot {
 }
 
 export class Player {
-  constructor(name: string, color: string) {
+  constructor(name: string, color: string, playerID: number) {
     this.color = color;
     this.name = name;
+    this.playerID = playerID;
   }
-  name: string = '';
-  color: string = '';
+  name: string;
+  color: string;
+  playerID: number;
 }
