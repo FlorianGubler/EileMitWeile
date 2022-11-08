@@ -7,38 +7,30 @@
   height: 100%;
 }
 
-.games {
+.left-components {
   display: flex;
-  height: fit-content;
-  background-color: antiquewhite;
-  padding: 5px;
   flex-direction: column;
-  border-radius: 5%;
-  border: 3px solid;
-}
-
-.dice-component {
-  display: flex;
-  height: fit-content;
-  background-color: antiquewhite;
-  padding: 5px;
-  flex-direction: column;
-  border-radius: 5%;
-  border: 3px solid;
-  margin-top: 10px;
-
-  .roll-button {
-    padding: 8px;
-    background-color: #904f;
-    margin: 10px;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    cursor: pointer;
-  }
-
-  .dices {
+  .dice-component {
     display: flex;
+    height: fit-content;
+    background-color: antiquewhite;
+    padding: 5px;
+    flex-direction: column;
+    border-radius: 5%;
+    border: 3px solid;
+    margin-top: 10px;
+    justify-content: center;
+    align-items: center;
+
+    .roll-button {
+      padding: 8px;
+      background-color: #904f;
+      margin: 10px;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
+    }
 
     .dice {
       display: flex;
@@ -51,6 +43,27 @@
       font-size: 50px;
     }
   }
+
+  .nextPlayer-component {
+    display: flex;
+    height: fit-content;
+    background-color: antiquewhite;
+    padding: 5px;
+    flex-direction: column;
+    border-radius: 5%;
+    border: 3px solid;
+    margin-top: 10px;
+  }
+}
+
+.games {
+  display: flex;
+  height: fit-content;
+  background-color: antiquewhite;
+  padding: 5px;
+  flex-direction: column;
+  border-radius: 5%;
+  border: 3px solid;
 }
 
 .grid-container {
@@ -77,9 +90,10 @@
     justify-content: center;
 
     .figure {
-      align-items: center;
       display: flex;
+      align-items: center;
       justify-content: center;
+      cursor: pointer;
     }
   }
 }
