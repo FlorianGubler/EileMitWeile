@@ -27,15 +27,16 @@ export class GameboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if(!this.apiService.isAuthenticated){
-      this.router.navigateByUrl("/");
-      //TODO Close Dialog
-    }
+    // if(!this.apiService.isAuthenticated){
+    //   this.router.navigateByUrl("/");
+    //   //TODO Close Dialog
+    // }
     this.openDialog();
   }
 
   roll() {
-    this.rnd1 = Math.round(Math.random() * (5 - 1 + 1) + 1);
+    this.rnd1 = Math.round(Math.random() * (5 - 1 + 1) + 1);    
+    this.cantMove(this.nextPlayer);
   }
 
   openDialog() {
@@ -76,6 +77,8 @@ export class GameboardComponent implements OnInit {
   }
 
   move(field: number, player: Player, diceNmbr: number) {
+    var clickedDot = this.dots.find((d) => d.fieldId == field);
+
     console.log(field);
     console.log(player);
     console.log(diceNmbr);
@@ -87,8 +90,6 @@ export class GameboardComponent implements OnInit {
       clickedDot.content = '';
     }
 
-    if (this.cantMove(player)) {
-    }
 
     //leave Home
     if (
@@ -97,6 +98,8 @@ export class GameboardComponent implements OnInit {
       clickedDot?.color == player.color
     ) {
       this.leaveHome(field);
+      clickedDot.content = '';
+      this.finishTurn();
       return;
     }
 
@@ -104,15 +107,22 @@ export class GameboardComponent implements OnInit {
     if (field > 0 && field <= 40 && clickedDot?.figureColor == player.color) {
       var nextFieldId = field + diceNmbr;
 
+      if (nextFieldId > 40) {
+        nextFieldId = nextFieldId - 40;
+      }
+
       var nextDot = this.dots.find((d) => d.fieldId == nextFieldId);
+
       if (nextDot != undefined) {
         nextDot.content = '♟';
         nextDot.figureColor = player.color;
       }
+      this.finishTurn();
+      return;
     }
   }
 
-  finishRound() {
+  finishTurn() {
     if (this.nextPlayer.playerID == 3) {
       this.nextPlayer = this.players[0];
     } else {
@@ -121,21 +131,15 @@ export class GameboardComponent implements OnInit {
   }
 
   cantMove(player: Player) {
-    switch (player.color) {
-      case 'red':
-        this.checkHome(201, 202, 203, 204)
-      break;
+    var figure = this.dots.find((d) => d.figureColor == player.color)
+    if(figure == undefined){
+      console.log('cantmove');
     }
-    return true;
-  }
-
-  checkHome(id1:number, id2:number, id3:number, id4:number){
-
-    if(this.dots.find((d) => d.fieldId == id1)?.content == ''){
-
+    else
+    {
+      console.log('canmove');
     }
 
-    return true;
   }
 
   private leaveHome(field: number) {
