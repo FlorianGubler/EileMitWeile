@@ -7,7 +7,16 @@
       </div>
     </div>
     <div class="nextPlayer-component">
-      <div>It's {{ nextPlayer.name }}'s turn</div>
+      <p>
+        It's
+        <span
+          [ngStyle]="{
+            color: nextPlayer.color
+          }"
+          >{{ nextPlayer.name }}'s</span
+        >
+        turn
+      </p>
     </div>
   </div>
   <div class="grid-container">
@@ -24,8 +33,9 @@
           [ngStyle]="{ color: dot.figureColor }"
           (click)="getFieldId(dot.fieldId)"
         >
-          {{dot.content}}
+          {{ dot.content }}
         </p>
       </span>
     </div>
+  </div>
 </div>

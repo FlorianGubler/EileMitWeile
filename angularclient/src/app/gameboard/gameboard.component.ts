@@ -27,16 +27,19 @@ export class GameboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // if(!this.apiService.isAuthenticated){
-    //   this.router.navigateByUrl("/");
-    //   //TODO Close Dialog
-    // }
+    if(!this.apiService.isAuthenticated){
+      this.router.navigateByUrl("/");
+      return;
+    }
+    
     this.openDialog();
   }
 
   roll() {
     this.rnd1 = Math.round(Math.random() * (5 - 1 + 1) + 1);    
-    this.cantMove(this.nextPlayer);
+    if(!this.canMove(this.nextPlayer)){
+      this.finishTurn();
+    };
   }
 
   openDialog() {
@@ -130,14 +133,16 @@ export class GameboardComponent implements OnInit {
     }
   }
 
-  cantMove(player: Player) {
+  canMove(player: Player) {
     var figure = this.dots.find((d) => d.figureColor == player.color)
+    console.log(figure);
+
     if(figure == undefined){
-      console.log('cantmove');
+      return false;
     }
     else
     {
-      console.log('canmove');
+      return true;
     }
 
   }

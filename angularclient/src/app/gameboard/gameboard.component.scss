@@ -59,11 +59,14 @@
     }
 
     .nextPlayer-component {
+      min-width: 150px;
       display: flex;
       height: fit-content;
-      background-color: antiquewhite;
-      padding: 5px;
       flex-direction: column;
+      align-items: center;
+      background-color: antiquewhite;
+      font-size: 17px;
+      padding: 5px;
       border-radius: 5%;
       border: 3px solid;
       margin-top: 10px;
