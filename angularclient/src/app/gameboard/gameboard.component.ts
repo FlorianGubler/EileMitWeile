@@ -8,6 +8,7 @@ import { StartDialogComponent } from '../start-dialog/start-dialog.component';
 import { ApiService } from '../apiservice.service';
 import { User } from '../user';
 import { Router, withRouterConfig } from '@angular/router';
+import { WinnerPageComponent } from '../winner-page/winner-page.component';
 
 @Component({
   selector: 'app-gameboard',
@@ -27,19 +28,32 @@ export class GameboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if(!this.apiService.isAuthenticated){
-      this.router.navigateByUrl("/");
-      return;
-    }
-    
+    // if(!this.apiService.isAuthenticated){
+    //   this.router.navigateByUrl("/");
+    //   return;
+    // }
+
     this.openDialog();
   }
 
   roll() {
-    this.rnd1 = Math.round(Math.random() * (5 - 1 + 1) + 1);    
-    if(!this.canMove(this.nextPlayer)){
+    this.rnd1 = Math.round(Math.random() * (5 - 1 + 1) + 1);
+    if (!this.canMove(this.nextPlayer)) {
       this.finishTurn();
-    };
+    }
+  }
+
+  eatPlayer(playerColor: string) {
+    var homeDot = this.dots.find(
+      (d) =>
+        d.color == playerColor &&
+        d.fieldId.toString().length == 3 &&
+        d.content == ''
+    );
+    console.log(homeDot);
+    if (homeDot != null) {
+      homeDot.content = '♟';
+    }
   }
 
   openDialog() {
@@ -53,7 +67,7 @@ export class GameboardComponent implements OnInit {
       player1: 2,
     };
 
-    const dialogRef = this.dialog.open(StartDialogComponent, dialogConfig);
+    const dialogRef = this.dialog.open(WinnerPageComponent, dialogConfig);
 
     dialogRef
       .afterClosed()
@@ -82,17 +96,9 @@ export class GameboardComponent implements OnInit {
   move(field: number, player: Player, diceNmbr: number) {
     var clickedDot = this.dots.find((d) => d.fieldId == field);
 
-    console.log(field);
-    console.log(player);
-    console.log(diceNmbr);
-    console.log(this.players);
-
-    var clickedDot = this.dots.find((d) => d.fieldId == field);
-
     if (clickedDot?.figureColor == player.color && clickedDot != undefined) {
       clickedDot.content = '';
     }
-
 
     //leave Home
     if (
@@ -116,6 +122,18 @@ export class GameboardComponent implements OnInit {
 
       var nextDot = this.dots.find((d) => d.fieldId == nextFieldId);
 
+      if (nextDot?.content == '♟') {
+        console.log('eat');
+        this.eatPlayer(nextDot.figureColor);
+        nextDot.content = '';
+      }
+
+      if (nextDot != undefined) {
+        if (player.color == 'red' && nextDot?.fieldId > 40) {
+          nextDot.fieldId = nextDot.fieldId + 102;
+        }
+      }
+
       if (nextDot != undefined) {
         nextDot.content = '♟';
         nextDot.figureColor = player.color;
@@ -134,17 +152,13 @@ export class GameboardComponent implements OnInit {
   }
 
   canMove(player: Player) {
-    var figure = this.dots.find((d) => d.figureColor == player.color)
-    console.log(figure);
+    var figure = this.dots.find((d) => d.figureColor == player.color);
 
-    if(figure == undefined){
+    if (figure == undefined) {
       return false;
-    }
-    else
-    {
+    } else {
       return true;
     }
-
   }
 
   private leaveHome(field: number) {
@@ -584,28 +598,28 @@ export class GameboardComponent implements OnInit {
       color: '',
       bordercolor: 'red',
       figureColor: 'transparent',
-      fieldId: 0,
+      fieldId: 140,
       content: '',
     },
     {
       color: '',
       bordercolor: 'red',
       figureColor: 'transparent',
-      fieldId: 0,
+      fieldId: 141,
       content: '',
     },
     {
       color: '',
       bordercolor: 'red',
       figureColor: 'transparent',
-      fieldId: 0,
+      fieldId: 142,
       content: '',
     },
     {
       color: '',
       bordercolor: 'red',
       figureColor: 'transparent',
-      fieldId: 0,
+      fieldId: 143,
       content: '',
     },
     {

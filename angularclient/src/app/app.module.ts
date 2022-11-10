@@ -18,6 +18,7 @@ import {MatButtonModule} from "@angular/material/button";
 import { NavComponent } from './nav/nav.component';
 import {MatCardModule} from "@angular/material/card";
 import {MatExpansionModule} from "@angular/material/expansion";
+import { WinnerPageComponent } from './winner-page/winner-page.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import {MatExpansionModule} from "@angular/material/expansion";
     RegisterComponent,
     GameboardComponent,
     StartDialogComponent,
-    NavComponent
+    NavComponent,
+    WinnerPageComponent
   ],
     imports: [
         BrowserModule,
