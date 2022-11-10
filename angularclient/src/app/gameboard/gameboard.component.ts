@@ -33,7 +33,6 @@ export class GameboardComponent implements OnInit {
        this.router.navigateByUrl("/");
        return;
     }
-
     this.openDialog();
   }
 

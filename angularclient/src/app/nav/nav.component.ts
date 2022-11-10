@@ -5,7 +5,6 @@ import {Game} from "../game";
 import {GameRank} from "../game-rank";
 import {DatePipe} from '@angular/common';
 import {Rank} from "../rank";
-import {HttpResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-nav',
@@ -39,5 +38,13 @@ export class NavComponent implements OnInit {
   signOut(): void {
     this.apiService.logout();
     this.router.navigateByUrl("/");
+  }
+
+  delAccount(userid: String): void {
+    if(this.apiService.isAuthenticated){
+      // @ts-ignore
+      this.apiService.deleteUser(userid);
+      this.router.navigateByUrl("/");
+    }
   }
 }
