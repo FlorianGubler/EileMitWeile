@@ -8,7 +8,6 @@ import { StartDialogComponent } from '../start-dialog/start-dialog.component';
 import { ApiService } from '../apiservice.service';
 import { User } from '../user';
 import { Router, withRouterConfig } from '@angular/router';
-import { WinnerPageComponent } from '../winner-page/winner-page.component';
 
 @Component({
   selector: 'app-gameboard',
@@ -67,7 +66,7 @@ export class GameboardComponent implements OnInit {
       player1: 2,
     };
 
-    const dialogRef = this.dialog.open(WinnerPageComponent, dialogConfig);
+    const dialogRef = this.dialog.open(StartDialogComponent, dialogConfig);
 
     dialogRef
       .afterClosed()
