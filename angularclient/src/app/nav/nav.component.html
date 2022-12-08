@@ -9,7 +9,8 @@
             <mat-panel-title>Settings</mat-panel-title>
           </mat-expansion-panel-header>
           <div class="user-expand">
-            <button class="signout-btn" (click)="signOut()">Sign Out</button>
+            <button class="user-expand-btn" (click)="delAccount(this.apiService.sessionUser.id)">Delete User Account</button>
+            <button class="user-expand-btn signout-btn" (click)="signOut()">Sign Out</button>
           </div>
         </mat-expansion-panel>
       </div>

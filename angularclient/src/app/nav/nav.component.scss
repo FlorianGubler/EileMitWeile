@@ -18,17 +18,19 @@
   align-items: flex-start;
   justify-content: flex-start;
 }
-.user-expand .signout-btn{
+.user-expand .user-expand-btn{
   width: 100%;
   padding: 10px;
   background-color: white;
-  color: red;
   border: none;
   cursor: pointer;
   border-radius: 5px;
 }
-.user-expand .signout-btn:hover{
+.user-expand .user-expand-btn:hover{
   background-color: #f6f6f6;
+}
+.user-expand .signout-btn{
+  color: red;
 }
 .mat-expansion-panel-body {
   padding: 0 0 0 !important;

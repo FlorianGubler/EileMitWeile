@@ -126,7 +126,7 @@ export class ApiService {
 
   deleteUser(memberid: string){
     const headers = this.getAuthHeader();
-    const params = new HttpParams().set('gameid', memberid);
+    const params = new HttpParams().set('memberid', memberid);
     return this.handleGenericErrors(this.http.delete<void>(this.baseURL + "/members/{memberid}", {headers, params}));
   }
 

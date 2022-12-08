@@ -19,6 +19,8 @@ export class GameboardComponent implements OnInit {
   nextPlayer: Player = new Player('', '', 0);
   players: Player[] = [];
   fieldId: number | undefined;
+  hasDiced: boolean = false;
+  gameStarted: boolean = false;
 
   constructor(
     private dialog: MatDialog,
@@ -27,19 +29,22 @@ export class GameboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // if(!this.apiService.isAuthenticated){
-    //   this.router.navigateByUrl("/");
-    //   return;
-    // }
-
+    if(!this.apiService.isAuthenticated){
+       this.router.navigateByUrl("/");
+       return;
+    }
     this.openDialog();
   }
 
   roll() {
-    this.rnd1 = Math.round(Math.random() * (5 - 1 + 1) + 1);
     if (!this.canMove(this.nextPlayer)) {
       this.finishTurn();
     }
+    if(this.hasDiced){
+      return;
+    }
+    this.rnd1 = Math.round(Math.random() * (5 - 1 + 1) + 1);
+    this.hasDiced = true;
   }
 
   eatPlayer(playerColor: string) {
@@ -78,7 +83,8 @@ export class GameboardComponent implements OnInit {
             new Player(data['player3'], '#f6be00', 2),
             new Player(data['player4'], 'green', 3),
           ]),
-          (this.nextPlayer = this.players[0])
+          (this.nextPlayer = this.players[0]),
+          (this.gameStarted = true)
         )
       );
   }
@@ -93,6 +99,9 @@ export class GameboardComponent implements OnInit {
   }
 
   move(field: number, player: Player, diceNmbr: number) {
+    if(!this.hasDiced){
+      return;
+    }
     var clickedDot = this.dots.find((d) => d.fieldId == field);
 
     if (clickedDot?.figureColor == player.color && clickedDot != undefined) {
@@ -103,7 +112,8 @@ export class GameboardComponent implements OnInit {
     if (
       diceNmbr == 6 &&
       field.toString().length == 3 &&
-      clickedDot?.color == player.color
+      clickedDot?.color == player.color &&
+      nextDot?.figureColor != player.color
     ) {
       this.leaveHome(field);
       clickedDot.content = '';
@@ -148,6 +158,7 @@ export class GameboardComponent implements OnInit {
     } else {
       this.nextPlayer = this.players[this.nextPlayer.playerID + 1];
     }
+    this.hasDiced = false;
   }
 
   canMove(player: Player) {
