@@ -85,18 +85,8 @@ public class AuthController {
             @RequestBody(required = true)
             MemberDTO registerdto
     ) throws GeneralSecurityException, IOException {
-        
-        PasswordValidator passwordValidator = new PasswordValidator(new LengthRule(8), new CharacterRule(EnglishCharacterData.Digit));
 
-        PasswordData passwordData = new PasswordData(registerdto.getPassword());
-
-        RuleResult validate = passwordValidator.validate(passwordData);
-
-        if (!validate.isValid()){
-            throw new IllegalArgumentException("Password is too weak");
-        }
-
-        Path path = Paths.get("10000pw.txt");
+        Path path = Paths.get("src/main/resources/10000pw.txt");
 
         List<String> lines = Files.readAllLines(path);
 
