@@ -1,7 +1,6 @@
 package com.github.floriangubler.eilemitweile.controller;
 
-import com.github.floriangubler.eilemitweile.entity.LoginDTO;
-import com.github.floriangubler.eilemitweile.entity.MemberDTO;
+import com.github.floriangubler.eilemitweile.entity.*;
 import com.github.floriangubler.eilemitweile.exception.UserAlreadyExistsException;
 import com.github.floriangubler.eilemitweile.exception.UsernamePasswordException;
 import com.github.floriangubler.eilemitweile.service.MemberService;
@@ -9,8 +8,6 @@ import de.taimos.totp.TOTP;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
-import com.github.floriangubler.eilemitweile.entity.MemberEntity;
-import com.github.floriangubler.eilemitweile.entity.TokenResponse;
 import com.github.floriangubler.eilemitweile.repository.MemberRepository;
 import com.github.floriangubler.eilemitweile.security.JwtServiceHMAC;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.logging.LogLevel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
 
@@ -61,7 +59,7 @@ public class AuthController {
             tags = {"Authorization"}
     )
     @PostMapping(value = "/login", produces = "application/json")
-    public ResponseEntity<TokenResponse> login(
+    public ResponseEntity<?> login(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Member", required = true)
             @RequestBody(required = true)
             LoginDTO logindto) throws UsernamePasswordException {
@@ -69,7 +67,9 @@ public class AuthController {
         try{
             res = getToken(logindto.getEmail(), logindto.getPassword());
         } catch (UsernamePasswordException e){
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(new FaultResponse(e.getMessage()), HttpStatus.UNAUTHORIZED);
+        } catch(LockedException e1){
+            return new ResponseEntity<>(new FaultResponse(e1.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
@@ -80,7 +80,7 @@ public class AuthController {
             tags = {"Authorization"}
     )
     @PostMapping(value = "/register", produces = "application/json")
-    public ResponseEntity<TokenResponse> register(
+    public ResponseEntity<?> register(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Member", required = true)
             @RequestBody(required = true)
             MemberDTO registerdto
@@ -90,21 +90,23 @@ public class AuthController {
 
         List<String> lines = Files.readAllLines(path);
 
-        if (lines.contains(registerdto.getPassword())){
-            throw new IllegalArgumentException("Password is too weak");
+        if (lines.contains(registerdto.getPassword())) {
+            return new ResponseEntity<>(new FaultResponse("Password is too weak"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         String passwordHash = BCrypt.hashpw(registerdto.getPassword(), BCrypt.gensalt());
-        try{
-            memberService.create(new MemberEntity(UUID.randomUUID(), registerdto.getEmail(), registerdto.getFirstname(), registerdto.getLastname(), passwordHash));
-        } catch(UserAlreadyExistsException e){
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        try {
+            memberService.create(new MemberEntity(UUID.randomUUID(), registerdto.getEmail(), registerdto.getFirstname(), registerdto.getLastname(), passwordHash, true, 0, null));
+        } catch (UserAlreadyExistsException e) {
+            return new ResponseEntity<>(new FaultResponse("This E-Mail address is already in use"), HttpStatus.CONFLICT);
         }
         TokenResponse res;
-        try{
+        try {
             res = getToken(registerdto.getEmail(), registerdto.getPassword());
-        } catch (UsernamePasswordException e){
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } catch (UsernamePasswordException e) {
+            return new ResponseEntity<>(new FaultResponse(e.getMessage()), HttpStatus.UNAUTHORIZED);
+        } catch (LockedException e1) {
+            return new ResponseEntity<>(new FaultResponse(e1.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
@@ -112,14 +114,27 @@ public class AuthController {
     public TokenResponse getToken(String email, String password) throws UsernamePasswordException {
         val optionalMember = memberRepository.findByEmail(email);
         if (optionalMember.isEmpty()) {
-            throw new UsernamePasswordException();
-        }
-
-        if (!BCrypt.checkpw(password, optionalMember.get().getPasswordHash())) {
+            System.out.println("email");
             throw new UsernamePasswordException();
         }
 
         val member = optionalMember.get();
+
+        //When account is locked and unlock didn't work
+        if(!member.getAccountNonLocked() && !memberService.unlockWhenTimeExpired(member)){
+            throw new LockedException("Account is locked");
+        }
+
+        if (!BCrypt.checkpw(password, member.getPasswordHash())) {
+            System.out.println("pass");
+            if (member.getFailedAttempt() < MemberService.MAX_FAILED_ATTEMPTS - 1) {
+                 memberService.increaseFailedAttempts(member);
+            } else {
+                memberService.lock(member);
+                throw new LockedException("Your account has been locked due to 3 failed attempts. It will be unlocked after 24 hours.");
+            }
+            throw new UsernamePasswordException();
+        }
 
         val id = UUID.randomUUID().toString();
         val scopes = new ArrayList<String>();
@@ -127,22 +142,5 @@ public class AuthController {
         val newAccessToken = jwtService.createNewJWT(id, member.getId().toString(), member.getEmail(), scopes);
 
         return new TokenResponse(newAccessToken, "Bearer");
-    }
-
-    // QDWSM3OYBPGTEVSPB5FKVDM3CSNCWHVK
-    public static String generateSecretKey() {
-        SecureRandom random = new SecureRandom();
-        byte[] bytes = new byte[20];
-        random.nextBytes(bytes);
-        Base32 base32 = new Base32();
-        return base32.encodeToString(bytes);
-    }
-
-
-    public static String getTOTPCode(String secretKey) {
-        Base32 base32 = new Base32();
-        byte[] bytes = base32.decode(secretKey);
-        String hexKey = Hex.encodeHexString(bytes);
-        return de.taimos.totp.TOTP.getOTP(hexKey);
     }
 }

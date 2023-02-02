@@ -9,6 +9,7 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -39,6 +40,15 @@ public class MemberEntity implements Serializable {
 
     @Column(name = "password", nullable = false)
     String passwordHash;
+
+    @Column(name = "account_non_locked")
+    Boolean accountNonLocked;
+
+    @Column(name = "failed_attempt")
+    Integer failedAttempt;
+
+    @Column(name = "lock_time")
+    Date lockTime;
 
     @Override
     public boolean equals(Object o) {
